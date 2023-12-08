@@ -1,19 +1,113 @@
 <script setup>
-import { ref } from 'vue'
-import axios from 'axios'
+// import { storeToRef, defineStore } from 'pinia'
+// import { useUserStore } from '../store/user.js'
+// import Cookies from 'js-cookie'
+// import { FormRules } from 'element-plus'
 import 'animate.css'
+import axios from 'axios'
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 
-let username = ref('')
-let password = ref('')
+axios.defaults.withCredentials = true //让ajax携带cookie
+axios.defaults.baseURL = 'http://127.0.0.1:5173' //初始化基础地
 
-function test() {
-  console.log(username.value)
-  console.log(password.value)
+let formData = ref({
+  username: '',
+  password: ''
+})
+
+const ruleForm = reactive({
+  username: '',
+  password: ''
+})
+
+const validatePass = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入用户名'))
+  } else {
+    if (ruleForm.username !== '') {
+      if (!formData.value) return
+      formData.value.validateField('checkPass', () => null)
+    }
+    callback()
+  }
+}
+const validatePass2 = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'))
+  } else {
+    if (ruleForm.password !== '') {
+      if (!formData.value) return
+      formData.value.validateField('checkPass', () => null)
+    }
+    callback()
+  }
+}
+
+const rules = reactive({
+  username: [{ validator: validatePass, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ validator: validatePass2, message: '请输入密码', trigger: 'blur' }]
+})
+
+const errorAlert = (mess) => {
+  ElMessage({
+    showClose: true,
+    message: mess,
+    type: 'error'
+  })
+}
+
+const successAlert = (mess) => {
+  ElMessage({
+    showClose: true,
+    message: mess,
+    type: 'success'
+  })
+}
+
+function login() {
+  console.log(formData.value.username)
+  console.log(formData.value.password)
+
+  if (formData.value.username == '') {
+    errorAlert('请输入账号')
+    return
+  }
+  if (formData.value.password == '') {
+    errorAlert('请输入密码')
+    return
+  }
   axios
-    .get('https://api.bulbul559.cn/bulbox/getYouAskMe/')
-    // axios.get('https://api.bulbul559.cn/bulbox/getQues/')
+    .post('http://127.0.0.1:8000/verify/login/', {
+      username: formData.value.username,
+      password: formData.value.password
+    })
     .then((res) => {
       console.log(res)
+      if (res.data == '登录成功') {
+        successAlert('登录成功')
+        window.location.href = '/'
+      } else if (res.data == '账号不存在') {
+        errorAlert('账号不存在')
+      } else if (res.data == '密码错误') {
+        errorAlert('账号或密码错误')
+      } else {
+        errorAlert('未知错误')
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+function logout() {
+  axios
+    .post('http://127.0.0.1:8000/verify/logout/')
+    .then((res) => {
+      console.log(res)
+      if (res.data == '登录成功') {
+        console.log('登录成功')
+      }
     })
     .catch(function (error) {
       console.log(error)
@@ -24,15 +118,33 @@ function test() {
 <template>
   <div class="login-box">
     <img src="../assets/img/youthol.png" alt="" class="youthol-logo" />
-    <div class="username-box box-content">
-      <div class="tips">用户名</div>
-      <input class="username input-box" v-model="username" />
-    </div>
-    <div class="password-box box-content">
-      <div class="tips">密码</div>
-      <input class="password input-box" type="password" v-model="password" />
-    </div>
-    <div class="login-btn" @click="test">登 录</div>
+    <el-form :model="formData" status-icon :rules="rules" class="form">
+      <div class="username-box box-content">
+        <el-form-item class="form-item" label="账号：" prop="username">
+          <el-input
+            class="input-box"
+            v-model="formData.username"
+            placeholder="请输入账号"
+            autocomplete="off"
+          />
+        </el-form-item>
+      </div>
+      <div class="password-box box-content">
+        <el-form-item class="form-item" label="密码：" prop="password">
+          <el-input
+            class="input-box"
+            v-model="formData.password"
+            type="password"
+            placeholder="请输入密码"
+            autocomplete="off"
+            error="错误"
+            show-message="true"
+          />
+        </el-form-item>
+      </div>
+    </el-form>
+    <el-button class="login-btn" type="primary" plain @click="login">登录</el-button>
+    <el-button class="login-btn" type="primary" plain @click="logout">退出</el-button>
   </div>
 </template>
 
@@ -41,7 +153,7 @@ function test() {
   background-color: white;
   margin: 30vh auto;
   padding: 20px;
-  width: 35%;
+  width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -49,46 +161,48 @@ function test() {
   border-radius: 20px;
   box-shadow: 0 0 40px 0 rgba(77, 77, 77, 0.452);
 }
+
 .box-content {
-  width: 70%;
+  width: 100%;
   padding: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .youthol-logo {
-  margin: 0 0 20px;
+  margin: 0 0 30px;
   width: 30%;
   height: auto;
 }
-.tips {
-  margin: 10px;
-  font-size: 20px;
-  color: rgb(88, 88, 88);
+
+.form-item {
+  display: flex;
+  align-items: center;
+  width: 70%;
 }
 .input-box {
-  width: 80%;
-  padding: 2px 10px;
-  font-size: 20px;
-  height: 36px;
-  border: 0px solid;
-  border-radius: 5px;
-  box-shadow: 0 0 4px 0 rgba(77, 77, 77, 0.452);
+  height: 35px;
+  width: 100%;
 }
 
 .login-btn {
   width: 100px;
   height: 40px;
   margin: 20px 0 10px;
-  padding: 5px;
+  padding: 20px 5px;
   font-size: 22px;
-  color: white;
-  background-color: #2298ff;
   border-radius: 10px;
-  box-shadow: 0 0 4px 0 rgba(77, 77, 77, 0.452);
   display: flex;
   justify-content: center;
   align-items: center;
+  /* margin-left: 0 !important; */
 }
 </style>
