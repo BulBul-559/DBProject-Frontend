@@ -1,69 +1,39 @@
 <script setup>
 // import { storeToRef, defineStore } from 'pinia'
 // import { useUserStore } from '../store/user.js'
-// import Cookies from 'js-cookie'
 // import { FormRules } from 'element-plus'
+import Cookies from 'js-cookie'
 import 'animate.css'
-import axios from 'axios'
-import { reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
 
-axios.defaults.withCredentials = true //让ajax携带cookie
-axios.defaults.baseURL = 'http://127.0.0.1:5173' //初始化基础地
+import { successAlert, errorAlert } from '../assets/js/message.js'
+import { reactive, ref, onMounted } from 'vue'
+import { http } from '../assets/js/http.js'
+
+// axios.defaults.withCredentials = true //让ajax携带cookie
+// axios.defaults.baseURL = 'http://127.0.0.1:8000' //初始化基础地
 
 let formData = ref({
   username: '',
   password: ''
 })
 
-const ruleForm = reactive({
-  username: '',
-  password: ''
-})
-
-const validatePass = (rule, value, callback) => {
+const verifyUsername = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('请输入用户名'))
-  } else {
-    if (ruleForm.username !== '') {
-      if (!formData.value) return
-      formData.value.validateField('checkPass', () => null)
-    }
-    callback()
   }
+  callback()
 }
-const validatePass2 = (rule, value, callback) => {
+const verifyPassword = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('请输入密码'))
-  } else {
-    if (ruleForm.password !== '') {
-      if (!formData.value) return
-      formData.value.validateField('checkPass', () => null)
-    }
-    callback()
   }
+  callback()
 }
 
 const rules = reactive({
-  username: [{ validator: validatePass, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ validator: validatePass2, message: '请输入密码', trigger: 'blur' }]
+  username: [{ validator: verifyUsername, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ validator: verifyPassword, message: '请输入密码', trigger: 'blur' }]
 })
-
-const errorAlert = (mess) => {
-  ElMessage({
-    showClose: true,
-    message: mess,
-    type: 'error'
-  })
-}
-
-const successAlert = (mess) => {
-  ElMessage({
-    showClose: true,
-    message: mess,
-    type: 'success'
-  })
-}
 
 function login() {
   console.log(formData.value.username)
@@ -77,8 +47,8 @@ function login() {
     errorAlert('请输入密码')
     return
   }
-  axios
-    .post('http://127.0.0.1:8000/verify/login/', {
+  http
+    .post('/verify/login/', {
       username: formData.value.username,
       password: formData.value.password
     })
@@ -100,19 +70,12 @@ function login() {
     })
 }
 
-function logout() {
-  axios
-    .post('http://127.0.0.1:8000/verify/logout/')
-    .then((res) => {
-      console.log(res)
-      if (res.data == '登录成功') {
-        console.log('登录成功')
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-}
+// 生命周期
+onMounted(() => {
+  if (Cookies.get('is_login') == 1) {
+    window.location.href = '/'
+  }
+})
 </script>
 
 <template>
@@ -144,7 +107,6 @@ function logout() {
       </div>
     </el-form>
     <el-button class="login-btn" type="primary" plain @click="login">登录</el-button>
-    <el-button class="login-btn" type="primary" plain @click="logout">退出</el-button>
   </div>
 </template>
 

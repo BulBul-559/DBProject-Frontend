@@ -16,6 +16,7 @@ export default defineConfig({
       input:{
         main: 'index.html',
         login: '/login/index.html',
+        oa: '/OA/index.html',
         // main: resolve(__dirname, 'index.html'),
         // login: resolve(__dirname, '/login/index.html')
       }
