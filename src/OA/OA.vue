@@ -1,6 +1,8 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { RouterView, RouterLink } from 'vue-router'
+import { http } from '../assets/js/http.js' //配置了基本的设置
+import { useUserStore } from '../store/store.js'
 
 let userInfo = reactive({
   profileSrc: '/src/assets/img/me.jpg',
@@ -13,10 +15,44 @@ let stateBar = reactive({
   dutyState: '未值班',
   nowBrorrow: '1'
 })
+let store = useUserStore()
+
+function verifySignIn() {
+  http
+    .post(
+      '/verify/getUserInfo/',
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('YoutholAccessToken')
+        }
+      }
+    )
+    .then((res) => {
+      // 在这里设置 Pinia状态？
+      store = useUserStore()
+      store.$patch({ sdut_id: res.data.sdut_id, is_login: true })
+      // store.$patch({ sdut_id: res.data.sdut_id })
+      console.log(res)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+onMounted(() => {
+  if (store.is_login == true) {
+    //先检查 pinia
+    return
+  } else if (verifySignIn() == false) {
+    //未登录重定向
+    window.location.href = '/'
+  }
+})
 </script>
 
 <template>
-  <div class="common-layout">
+  <div class="main-layout">
     <el-container>
       <el-container>
         <el-aside class="aside-nav">
@@ -131,9 +167,11 @@ let stateBar = reactive({
   background-color: #008aff;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  bottom: 0;
 }
 
-.common-layout {
+.main-layout {
   height: 100%;
 }
 .el-container {

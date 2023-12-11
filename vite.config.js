@@ -7,16 +7,14 @@ import vue from '@vitejs/plugin-vue'
 // let __dirname = fileURLToPath(new URL('.', import.meta.url))
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-  ],
-  base: "/",
-  build:{
-    rollupOptions:{
-      input:{
+  plugins: [vue()],
+  base: '/youthol',
+  build: {
+    rollupOptions: {
+      input: {
         main: 'index.html',
         login: '/login/index.html',
-        oa: '/OA/index.html',
+        oa: '/OA/index.html'
         // main: resolve(__dirname, 'index.html'),
         // login: resolve(__dirname, '/login/index.html')
       }
@@ -24,7 +22,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      assets: fileURLToPath(new URL('./src/assets', import.meta.url))
     }
   }
 })

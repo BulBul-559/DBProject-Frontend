@@ -2,15 +2,11 @@
 // import { storeToRef, defineStore } from 'pinia'
 // import { useUserStore } from '../store/user.js'
 // import { FormRules } from 'element-plus'
-import Cookies from 'js-cookie'
 import 'animate.css'
 
 import { successAlert, errorAlert } from '../assets/js/message.js'
 import { reactive, ref, onMounted } from 'vue'
-import { http } from '../assets/js/http.js'
-
-// axios.defaults.withCredentials = true //让ajax携带cookie
-// axios.defaults.baseURL = 'http://127.0.0.1:8000' //初始化基础地
+import { http } from '../assets/js/http.js' //配置了基本的设置
 
 let formData = ref({
   username: '',
@@ -23,6 +19,7 @@ const verifyUsername = (rule, value, callback) => {
   }
   callback()
 }
+
 const verifyPassword = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('请输入密码'))
@@ -35,7 +32,7 @@ const rules = reactive({
   password: [{ validator: verifyPassword, message: '请输入密码', trigger: 'blur' }]
 })
 
-function login() {
+function signIn() {
   console.log(formData.value.username)
   console.log(formData.value.password)
 
@@ -48,18 +45,21 @@ function login() {
     return
   }
   http
-    .post('/verify/login/', {
+    .post('/verify/SignIn/', {
       username: formData.value.username,
       password: formData.value.password
     })
     .then((res) => {
-      console.log(res)
-      if (res.data == '登录成功') {
+      let data = res.data
+      let token = data.access_token
+
+      if (data.SignState == '登录成功') {
         successAlert('登录成功')
+        //存储 token
+        localStorage.setItem('YoutholAccessToken', token)
+        //跳转到首页
         window.location.href = '/'
-      } else if (res.data == '账号不存在') {
-        errorAlert('账号不存在')
-      } else if (res.data == '密码错误') {
+      } else if (data.SignState == '账号或密码错误') {
         errorAlert('账号或密码错误')
       } else {
         errorAlert('未知错误')
@@ -70,9 +70,58 @@ function login() {
     })
 }
 
+// function signUp() {
+//   console.log(formData.value.username)
+//   console.log(formData.value.password)
+
+//   if (formData.value.username == '') {
+//     errorAlert('请输入账号')
+//     return
+//   }
+//   if (formData.value.password == '') {
+//     errorAlert('请输入密码')
+//     return
+//   }
+//   http
+//     .post('/verify/signUp/', {
+//       username: formData.value.username,
+//       password: formData.value.password,
+//       email: 'sunorain@qq.com'
+//     })
+//     .then((res) => {
+//       console.log(res)
+//     })
+//     .catch(function (error) {
+//       console.log(error)
+//     })
+// }
+
+function verifySignIn() {
+  http
+    .post(
+      '/verify/getUserInfo/',
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('YoutholAccessToken')
+        }
+      }
+    )
+    .then((res) => {
+      // 在这里设置 Pinia状态？
+      console.log(res)
+      return true
+    })
+    .catch(function (error) {
+      console.log(error)
+      return false
+    })
+  return false
+}
+
 // 生命周期
 onMounted(() => {
-  if (Cookies.get('is_login') == 1) {
+  if (verifySignIn() == true) {
     window.location.href = '/'
   }
 })
@@ -102,11 +151,12 @@ onMounted(() => {
             autocomplete="off"
             error="错误"
             show-message="true"
+            show-password
           />
         </el-form-item>
       </div>
     </el-form>
-    <el-button class="login-btn" type="primary" plain @click="login">登录</el-button>
+    <el-button class="login-btn" type="primary" plain @click="signIn">登录</el-button>
   </div>
 </template>
 

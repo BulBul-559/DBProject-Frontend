@@ -1,71 +1,66 @@
 <script setup>
 // import { userRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
-// import { useUserStore } from './store/user.js'
-import axios from 'axios'
-
-import Cookies from 'js-cookie'
-// const userStore = useUserStore()
-axios.defaults.withCredentials = true //让ajax携带cookie
-axios.defaults.baseURL = 'http://127.0.0.1:8000' //初始化基础地
+import { onMounted } from 'vue'
+import { useUserStore } from './store/store.js'
+import YoutholTitle from './components/YoutholTitle.vue'
+import { http } from './assets/js/http.js' //配置了基本的设置
 
 function toLogin() {
-  window.location.href = '/login/'
+  window.location.href = '/youthol/login/'
   // userStore.add()
 }
 
 function toOA() {
-  window.location.href = '/OA/'
+  window.location.href = '/youthol/OA/'
 }
 
-let is_login = ref(0)
+let store = useUserStore()
 
-function logout() {
-  axios
-    .post('/verify/logout/')
+function verifySignIn() {
+  http
+    .post(
+      '/verify/getUserInfo/',
+      {},
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('YoutholAccessToken')
+        }
+      }
+    )
     .then((res) => {
+      // 在这里设置 Pinia状态？
+      store = useUserStore()
+      store.$patch({ sdut_id: res.data.sdut_id, is_login: true })
       console.log(res)
-      checkSignIn()
     })
     .catch(function (error) {
       console.log(error)
     })
 }
 
-function checkSignIn() {
-  if (Cookies.get('is_login') == 1) {
-    is_login.value = 1
-  } else {
-    is_login.value = 0
-  }
+function logout() {
+  localStorage.removeItem('YoutholAccessToken')
 }
+
 onMounted(() => {
-  console.log(Cookies.get('is_login'))
-  checkSignIn()
+  verifySignIn()
 })
-</script>
+</script> 
 <template>
-  <div class="content">
-    <div class="hello-title">Youthol</div>
+  <div class="main-layout">
+    <YoutholTitle></YoutholTitle>
+    <!-- <div class="hello-title">Youthol</div> -->
     <div class="divider"></div>
     <div class="choice-list">
-      <div v-if="is_login" class="choice" @click="toOA">OA系统</div>
+      <div v-if="store.is_login" class="choice" @click="toOA">OA系统</div>
       <div class="choice">我要投稿</div>
       <div class="choice">关于我们</div>
     </div>
     <div class="sign-box">
-      <div v-if="is_login" class="sign-btn" @click="logout">退出</div>
+      <div v-if="store.is_login" class="sign-btn" @click="logout">退出</div>
       <div v-else class="sign-btn" @click="toLogin">登录</div>
     </div>
   </div>
-  <router-view name="MemberDuty"></router-view>
-
-  <!-- <nav>
-    <RouterLink to="/">index</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-  </nav>
-  <RouterView /> -->
-  <!-- <Login></Login> -->
 </template>
 
 <style scoped>
@@ -81,7 +76,7 @@ onMounted(() => {
   width: 80%;
   border: 1px solid white;
 }
-.content {
+.main-layout {
   height: 100%;
   display: flex;
   flex-direction: column;
