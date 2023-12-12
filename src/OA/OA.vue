@@ -4,23 +4,27 @@ import { RouterView, RouterLink } from 'vue-router'
 import { http } from '../assets/js/http.js' //配置了基本的设置
 import { useUserStore } from '../store/store.js'
 
-let userInfo = reactive({
-  profileSrc: '/src/assets/img/me.jpg',
-  username: '孙美源',
-  department: '程序部'
-})
+// basic user infomation
+// let userInfo = reactive({
+//   profileSrc: '/src/assets/img/me.jpg',
+//   username: '孙美源',
+//   department: '程序部'
+// })
 
+// the bottom of the page, display some specific information
 let stateBar = reactive({
   allDuty: '4.5',
   dutyState: '未值班',
   nowBrorrow: '1'
 })
-let store = useUserStore()
 
+let userStore = useUserStore()
+
+// verify the token is vaild or not
 function verifySignIn() {
   http
     .post(
-      '/verify/getUserInfo/',
+      '/getYoutholerInfo/',
       {},
       {
         headers: {
@@ -30,18 +34,30 @@ function verifySignIn() {
     )
     .then((res) => {
       // 在这里设置 Pinia状态？
-      store = useUserStore()
-      store.$patch({ sdut_id: res.data.sdut_id, is_login: true })
+      userStore.$patch({
+        sdut_id: res.data.sdut_id,
+        is_login: true,
+        name: res.data.name,
+        department: res.data.department,
+        identity: res.data.identity
+      })
       // store.$patch({ sdut_id: res.data.sdut_id })
-      console.log(res)
+      console.log('已登录')
     })
     .catch(function (error) {
       console.log(error)
+      userStore.$patch({ sdut_id: 'no id', is_login: false })
     })
 }
 
+function Logout() {
+  localStorage.removeItem('YoutholAccessToken')
+  userStore.$patch({ sdut_id: '', is_login: false })
+  window.location.href = '/'
+}
+
 onMounted(() => {
-  if (store.is_login == true) {
+  if (userStore.is_login == true) {
     //先检查 pinia
     return
   } else if (verifySignIn() == false) {
@@ -57,10 +73,10 @@ onMounted(() => {
       <el-container>
         <el-aside class="aside-nav">
           <div class="user-info">
-            <el-image class="profile" :src="userInfo.profileSrc" fit="cover" />
+            <!-- <el-image class="profile" :src="userInfo.profileSrc" fit="cover" /> -->
             <div class="user-info-detail">
-              <div class="user-name">{{ userInfo.username }}</div>
-              <div class="department">{{ userInfo.department }}</div>
+              <div class="user-name">{{ userStore.name }}</div>
+              <div class="department">{{ userStore.department }}</div>
             </div>
           </div>
           <el-scrollbar>
@@ -83,23 +99,26 @@ onMounted(() => {
             <router-link to="/room">
               <div class="room nav-item">场地</div>
             </router-link>
+
+            <div class="logout nav-item" @click="Logout">退出</div>
           </el-scrollbar>
           <!-- <img src="../assets/img/youthol.png" alt="" class="youthol-logo" /> -->
         </el-aside>
         <el-main>
+          <!-- <el-scrollbar> -->
           <router-view name="MainComponment"></router-view>
+          <!-- </el-scrollbar> -->
         </el-main>
       </el-container>
 
       <el-footer class="state-bar">
         <div class="all-duty">累计值班：{{ stateBar.allDuty }}小时</div>
-        <div class="duty-status">未值班</div>
+        <div class="duty-state">{{ userStore.duty_state }}</div>
         <div class="now-brorrow">正在借用设备：{{ stateBar.nowBrorrow }}</div>
       </el-footer>
     </el-container>
   </div>
 </template>
-
 
 <style scoped>
 .youthol-logo {
@@ -163,11 +182,12 @@ onMounted(() => {
 }
 .el-footer {
   height: 30px;
+  width: 100%;
   display: flex;
   background-color: #008aff;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  position: fixed;
   bottom: 0;
 }
 
@@ -179,6 +199,7 @@ onMounted(() => {
 }
 
 .state-bar {
+  z-index: 10000;
   color: white;
 }
 </style>

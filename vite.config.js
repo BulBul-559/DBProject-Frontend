@@ -8,7 +8,7 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: '/youthol',
+  base: '/youthol/',
   build: {
     rollupOptions: {
       input: {
@@ -23,7 +23,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      assets: fileURLToPath(new URL('./src/assets', import.meta.url))
+      assets: fileURLToPath(new URL('./src/assets', import.meta.url)),
+      store: fileURLToPath(new URL('./src/store', import.meta.url)),
+      router: fileURLToPath(new URL('./src/router', import.meta.url)),
+      components: fileURLToPath(new URL('./src/components', import.meta.url))
     }
   }
 })

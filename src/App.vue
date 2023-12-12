@@ -19,7 +19,7 @@ let store = useUserStore()
 function verifySignIn() {
   http
     .post(
-      '/verify/getUserInfo/',
+      '/getUserInfo/',
       {},
       {
         headers: {
@@ -31,21 +31,23 @@ function verifySignIn() {
       // 在这里设置 Pinia状态？
       store = useUserStore()
       store.$patch({ sdut_id: res.data.sdut_id, is_login: true })
-      console.log(res)
+      console.log('已登录')
     })
     .catch(function (error) {
       console.log(error)
+      store.$patch({ sdut_id: 'no id', is_login: false })
     })
 }
 
 function logout() {
   localStorage.removeItem('YoutholAccessToken')
+  store.$patch({ sdut_id: '', is_login: false })
 }
 
 onMounted(() => {
   verifySignIn()
 })
-</script> 
+</script>
 <template>
   <div class="main-layout">
     <YoutholTitle></YoutholTitle>

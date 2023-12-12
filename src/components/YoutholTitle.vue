@@ -67,7 +67,7 @@ onMounted(() => {
 
 <style scoped>
 .title {
-  width: 100%;
+  width: 650px;
   height: 150px;
   display: flex;
   justify-content: center;

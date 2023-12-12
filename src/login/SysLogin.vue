@@ -45,7 +45,7 @@ function signIn() {
     return
   }
   http
-    .post('/verify/SignIn/', {
+    .post('/SignIn/', {
       username: formData.value.username,
       password: formData.value.password
     })
@@ -99,7 +99,7 @@ function signIn() {
 function verifySignIn() {
   http
     .post(
-      '/verify/getUserInfo/',
+      '/getUserInfo/',
       {},
       {
         headers: {
