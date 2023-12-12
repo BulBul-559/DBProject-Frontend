@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 export const errorAlert = (mess) => {
   ElMessage({
@@ -14,4 +14,14 @@ export const successAlert = (mess) => {
     message: mess,
     type: 'success'
   })
+}
+
+export const messageBox = (text, title, confirmText, cancelText, success, error) => {
+  ElMessageBox.confirm(text, title, {
+    distinguishCancelAndClose: true,
+    confirmButtonText: confirmText,
+    cancelButtonText: cancelText
+  })
+    .then(success)
+    .catch(error)
 }

@@ -11,21 +11,23 @@ let propData = defineProps({
     default: '70%'
   },
   _height: {
-      default: '620px'
-
+    default: '620px'
   }
 })
 
 let tableData = reactive([])
+const filterHandler = (value, row, column) => {
+  const property = column['property']
+  return row[property] === value
+}
 
 onMounted(() => {
   http
     .post('/getTodayDuty/')
     .then((res) => {
-      console.log(res.data)
       let data = res.data
       for (let i = 0; i < data.length; i++) {
-        console.log(data[i].start_time)
+        // console.log(data[i].start_time)
         let item = {
           sdut_id: data[i].sdut_id,
           name: data[i].name,
@@ -36,7 +38,7 @@ onMounted(() => {
         }
         tableData.push(item)
       }
-      console.log(tableData)
+      // console.log(tableData)
     })
     .catch(function (error) {
       console.log(error)
@@ -45,12 +47,42 @@ onMounted(() => {
 </script>
 <template>
   <div class="list" :style="{ '--width': _width, '--height': _height }">
-    <el-table :data="tableData" :key="true" border style="width: 100%">
-      <el-table-column prop="name" label="姓名" />
-      <el-table-column prop="department" label="部门" />
-      <el-table-column prop="start_time" label="开始时间" />
-      <el-table-column prop="end_time" label="结束时间" />
-      <el-table-column prop="duty_state" label="状态" />
+    <el-table
+      class="animate__animated animate__fadeInDown"
+      :data="tableData"
+      :default-sort="{ prop: 'start_time', order: 'descending' }"
+      :key="true"
+      border
+      style="width: 100%"
+    >
+      <el-table-column prop="name" label="姓名" sortable />
+      <el-table-column
+        prop="department"
+        label="部门"
+        :filters="[
+          { text: '程序部', value: '程序部' },
+          { text: '美工部', value: '美工部' },
+          { text: '综合部', value: '综合部' },
+          { text: '闪客部', value: '闪客部' },
+          { text: '视频推广部', value: '视频推广部' },
+          { text: '摄影部', value: '摄影部' }
+        ]"
+        :filter-method="filterHandler"
+        sortable
+      />
+      <el-table-column prop="start_time" label="开始时间" sortable />
+      <el-table-column prop="end_time" label="结束时间" sortable />
+      <el-table-column
+        prop="duty_state"
+        label="状态"
+        :filters="[
+          { text: '正在值班', value: '正在值班' },
+          { text: '正常值班', value: '正常值班' },
+          { text: '异常', value: '值班时间不足30分钟' }
+        ]"
+        :filter-method="filterHandler"
+        sortable
+      />
     </el-table>
   </div>
 </template>

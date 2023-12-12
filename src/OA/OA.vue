@@ -3,6 +3,7 @@ import { reactive, onMounted } from 'vue'
 import { RouterView, RouterLink } from 'vue-router'
 import { http } from '../assets/js/http.js' //配置了基本的设置
 import { useUserStore } from '../store/store.js'
+import { errorAlert, successAlert } from 'assets/js/message.js'
 
 // basic user infomation
 // let userInfo = reactive({
@@ -56,13 +57,38 @@ function Logout() {
   window.location.href = '/'
 }
 
+function checkDuty() {
+  http
+    .post('/CheckDuty/', {
+      sdut_id: userStore.sdut_id
+    })
+    .then((res) => {
+      console.log(res.data)
+      let data = res.data
+      if (data.duty_state == '未值班') return
+
+      userStore.$patch({
+        is_login: true,
+        duty_start_time: data.start_time,
+        duty_state: data.duty_state
+      })
+    })
+    .catch(function (error) {
+      console.log(error)
+      errorAlert('检查签到状态失败')
+    })
+}
+
 onMounted(() => {
   if (userStore.is_login == true) {
     //先检查 pinia
+    checkDuty()
     return
   } else if (verifySignIn() == false) {
     //未登录重定向
     window.location.href = '/'
+  } else {
+    checkDuty()
   }
 })
 </script>
@@ -80,9 +106,9 @@ onMounted(() => {
             </div>
           </div>
           <el-scrollbar>
-            <router-link to="/">
+            <!-- <router-link to="/">
               <div class="home nav-item">首页</div>
-            </router-link>
+            </router-link> -->
 
             <router-link to="/duty">
               <div class="duty nav-item">值班</div>
@@ -100,14 +126,27 @@ onMounted(() => {
               <div class="room nav-item">场地</div>
             </router-link>
 
+            <router-link to="/test">
+              <div class="test nav-item">测试</div>
+            </router-link>
+
+            <router-link to="/DutyRecord" v-if="userStore.identity == '管理员'">
+              <div class="DutyRecord nav-item">历史签到</div>
+            </router-link>
+            <router-link to="/MemberManage" v-if="userStore.identity == '管理员'">
+              <div class="MemberManage nav-item">成员管理</div>
+            </router-link>
+            <router-link to="/MachineManage" v-if="userStore.identity == '管理员'">
+              <div class="MachineManage nav-item">设备管理</div>
+            </router-link>
             <div class="logout nav-item" @click="Logout">退出</div>
           </el-scrollbar>
           <!-- <img src="../assets/img/youthol.png" alt="" class="youthol-logo" /> -->
         </el-aside>
         <el-main>
-          <!-- <el-scrollbar> -->
-          <router-view name="MainComponment"></router-view>
-          <!-- </el-scrollbar> -->
+          <el-scrollbar>
+            <router-view name="MainComponment"></router-view>
+          </el-scrollbar>
         </el-main>
       </el-container>
 
@@ -121,6 +160,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* @font-face {
+  font-family: 'SmileySans';
+  src: url('assets/font/SmileySans.ttf.woff2');
+} */
 .youthol-logo {
   /* margin: 0 0 30px; */
   /* width: auto;
@@ -146,6 +189,12 @@ onMounted(() => {
 
 .user-info-detail {
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'SmileySans';
+  font-size: 30px;
 }
 
 .user-info-detail > div {

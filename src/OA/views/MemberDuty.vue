@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
-import { errorAlert, successAlert } from 'assets/js/message.js'
+import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 
 // Import Swiper Vue.js components
 // Import Swiper styles
@@ -16,7 +16,7 @@ import { useUserStore } from '../../store/store'
 //   longtitude: 0
 // })
 let is_duty = ref(false)
-let look_data = ref('列表')
+let look_data = ref('排名')
 let userStore = useUserStore()
 
 let nowDuty = reactive({
@@ -79,7 +79,23 @@ function startDuty() {
     })
 }
 
-function finishDuty() {
+function toSecond(time) {
+  let timeParts = time.split(':')
+
+  if (timeParts.length === 3) {
+    // 如果有时、分、秒三个部分
+    let hours = parseInt(timeParts[0], 10)
+    let minutes = parseInt(timeParts[1], 10)
+    let seconds = parseInt(timeParts[2], 10)
+
+    // 计算总秒数
+    let totalSeconds = hours * 3600 + minutes * 60 + seconds
+
+    return totalSeconds
+  }
+}
+
+function toSignOutState() {
   http
     .post('/FinishDuty/', {
       sdut_id: userStore.sdut_id
@@ -89,7 +105,29 @@ function finishDuty() {
       if (data.message == '签退成功') {
         is_duty.value = false
         clearInterval(nowDuty.timer)
+
+        // 存到 pinia 中
+        userStore.$patch({
+          duty_start_time: '',
+          duty_state: ''
+        })
+        is_duty.value = false
+        nowDuty.start_time = ''
+        nowDuty.duty_state = '已签退'
+
         successAlert('签退成功')
+      } else {
+        is_duty.value = false
+        clearInterval(nowDuty.timer)
+        // 存到 pinia 中
+        userStore.$patch({
+          duty_start_time: '',
+          duty_state: ''
+        })
+        is_duty.value = false
+        nowDuty.start_time = ''
+        nowDuty.duty_state = '已签退'
+        errorAlert(data.message)
       }
       console.log(res)
     })
@@ -97,6 +135,30 @@ function finishDuty() {
       console.log(error)
       errorAlert('签退失败')
     })
+}
+
+function finishDuty() {
+  const success = () => {
+    toSignOutState()
+  }
+
+  const error = (action) => {
+    if (action === 'cancel') {
+      errorAlert('取消签退')
+    } else {
+      errorAlert('取消签退')
+    }
+  }
+
+  let text = "'值班不足30分钟，不会计入总时长，确定签退吗？'"
+  let title = '签退'
+  let confirmText = '确认签退'
+  let cancelText = '取消'
+  if (toSecond(nowDuty.pass_time) < 1800) {
+    messageBox(text, title, confirmText, cancelText, success, error)
+  } else {
+    toSignOutState()
+  }
 }
 
 function getTime(start_time) {
@@ -122,7 +184,8 @@ function getTime(start_time) {
 
   return formattedTime
 }
-onMounted(() => {
+
+function checkDuty() {
   http
     .post('/CheckDuty/', {
       sdut_id: userStore.sdut_id
@@ -149,6 +212,9 @@ onMounted(() => {
       console.log(error)
       errorAlert('检查签到状态失败')
     })
+}
+onMounted(() => {
+  checkDuty()
 })
 
 onUnmounted(() => {
@@ -158,7 +224,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="main-layout">
-    <div class="start-duty">
+    <div class="start-duty animate__animated animate__fadeInDown">
       <div v-if="!is_duty" class="sign-btn" @click="startDuty">签到</div>
       <div v-else class="sign-btn" @click="finishDuty">签退</div>
       <div class="now-duty">
@@ -236,7 +302,7 @@ onUnmounted(() => {
   border-radius: 25px;
   font-size: 50px;
   padding: 20px 20px;
-  border: 3px solid #008aff;
+  /* border: 3px solid #008aff; */
   color: #008aff;
 }
 </style>

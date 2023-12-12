@@ -7,7 +7,8 @@ const router = createRouter({
       path: '/',
       name: 'home',
       components: {
-        MainComponment: () => import('../views/OAHome.vue')
+        MainComponment: () => import('../views/MemberDuty.vue')
+        // MainComponment: () => import('../views/OAHome.vue')
       }
     },
     {
@@ -36,6 +37,34 @@ const router = createRouter({
       name: 'oa-room',
       components: {
         MainComponment: () => import('../views/RoomPlan.vue')
+      }
+    },
+    {
+      path: '/DutyRecord',
+      name: 'oa-duty-record',
+      components: {
+        MainComponment: () => import('../views/DutyRecord.vue')
+      }
+    },
+    {
+      path: '/MemberManage',
+      name: 'oa-member-manage',
+      components: {
+        MainComponment: () => import('../views/MemberManage.vue')
+      }
+    },
+    {
+      path: '/MachineManage',
+      name: 'oa-machine-manage',
+      components: {
+        MainComponment: () => import('../views/MachineManage.vue')
+      }
+    },
+    {
+      path: '/test',
+      name: 'oa-test',
+      components: {
+        MainComponment: () => import('../views/test.vue')
       }
     }
   ]

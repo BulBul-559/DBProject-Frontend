@@ -53,12 +53,12 @@ onMounted(() => {
     <YoutholTitle></YoutholTitle>
     <!-- <div class="hello-title">Youthol</div> -->
     <div class="divider"></div>
-    <div class="choice-list">
+    <div class="choice-list animate__animated animate__backInUp">
       <div v-if="store.is_login" class="choice" @click="toOA">OA系统</div>
       <div class="choice">我要投稿</div>
       <div class="choice">关于我们</div>
     </div>
-    <div class="sign-box">
+    <div class="sign-box animate__animated animate__backInUp">
       <div v-if="store.is_login" class="sign-btn" @click="logout">退出</div>
       <div v-else class="sign-btn" @click="toLogin">登录</div>
     </div>
@@ -68,10 +68,16 @@ onMounted(() => {
 <style scoped>
 .sign-btn {
   margin: 30px;
-  padding: 10px 20px;
-  font-size: 22px;
+  padding: 15px 25px;
+  font-size: 30px;
   border: 2px solid white;
   border-radius: 15px;
+}
+
+.sign-btn:hover {
+  background-color: white;
+  color: #008aff;
+  border: 2px solid 008aff;
 }
 .divider {
   margin: 10px;
@@ -94,7 +100,7 @@ onMounted(() => {
 
 .choice {
   margin: 10px;
-  font-size: 20px;
+  font-size: 25px;
 }
 .hello-title {
   font-size: 150px;
