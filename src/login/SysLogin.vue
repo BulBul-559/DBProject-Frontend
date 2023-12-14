@@ -4,9 +4,9 @@
 // import { FormRules } from 'element-plus'
 import 'animate.css'
 
-import { successAlert, errorAlert } from '../assets/js/message.js'
+import { successAlert, errorAlert } from 'assets/js/message.js'
 import { reactive, ref, onMounted } from 'vue'
-import { http } from '../assets/js/http.js' //配置了基本的设置
+import { http } from 'assets/js/http.js' //配置了基本的设置
 
 let formData = ref({
   username: '',
@@ -128,7 +128,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="login-box">
+  <div class="login-box animate__animated animate__fadeIn">
     <img src="../assets/img/youthol.png" alt="" class="youthol-logo" />
     <el-form :model="formData" status-icon :rules="rules" class="form">
       <div class="username-box box-content">

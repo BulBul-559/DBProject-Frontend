@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, onMounted } from 'vue'
 import { RouterView, RouterLink } from 'vue-router'
-import { http } from '../assets/js/http.js' //配置了基本的设置
-import { useUserStore } from '../store/store.js'
+import { http } from 'assets/js/http.js' //配置了基本的设置
+import { useUserStore } from 'store/store.js'
 import { errorAlert, successAlert } from 'assets/js/message.js'
 
 // basic user infomation
@@ -131,7 +131,7 @@ onMounted(() => {
             </router-link>
 
             <router-link to="/DutyRecord" v-if="userStore.identity == '管理员'">
-              <div class="DutyRecord nav-item">历史签到</div>
+              <div class="DutyRecord nav-item">签到记录</div>
             </router-link>
             <router-link to="/MemberManage" v-if="userStore.identity == '管理员'">
               <div class="MemberManage nav-item">成员管理</div>
@@ -219,16 +219,25 @@ onMounted(() => {
 }
 
 .nav-item {
+  margin: 3px 0;
   width: 100%;
   padding: 20px 0px;
-  border-top: 0.5px solid white;
-  border-bottom: 0.5px solid white;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
+
+.nav-item:hover {
+  opacity: 1;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.7);
+  transform: scale(1.05, 1.05);
+}
+
 .el-footer {
   height: 30px;
   width: 100%;
@@ -248,7 +257,7 @@ onMounted(() => {
 }
 
 .state-bar {
-  z-index: 10000;
+  z-index: 100;
   color: white;
 }
 </style>

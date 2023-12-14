@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import * as echarts from 'echarts'
-import { http } from '../assets/js/http'
+import { http } from 'assets/js/http'
 
 let propData = defineProps({
   title: {

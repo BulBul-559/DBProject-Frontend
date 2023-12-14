@@ -2,14 +2,11 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 
-// Import Swiper Vue.js components
-// Import Swiper styles
-
-import ShowDataBasicBar from 'components/ShowDataBasicBar.vue'
-import ShowDataBasicPie from 'components/ShowDataBasicPie.vue'
+import ShowDataBasicBar from '../components/ShowDataBasicBar.vue'
+import ShowDataBasicPie from '../components/ShowDataBasicPie.vue'
 import MemberList from '../components/MemberList.vue'
-import { http } from '../../assets/js/http'
-import { useUserStore } from '../../store/store'
+import { http } from 'assets/js/http'
+import { useUserStore } from 'store/store'
 
 // let location = reactive({
 //   latitude: 0,
@@ -225,12 +222,18 @@ onUnmounted(() => {
 <template>
   <div class="main-layout">
     <div class="start-duty animate__animated animate__fadeInDown">
-      <div v-if="!is_duty" class="sign-btn" @click="startDuty">签到</div>
-      <div v-else class="sign-btn" @click="finishDuty">签退</div>
+      <div class="sigb-btn-box">
+        <div v-if="!is_duty" class="sign-btn" @click="startDuty">签到</div>
+        <div v-else class="sign-btn" @click="finishDuty">签退</div>
+      </div>
       <div class="now-duty">
         <div class="now-duty-time">{{ is_duty ? nowDuty.pass_time : '未值班' }}</div>
         <el-divider class="duty_divider" />
         <div class="now-duty-state">{{ nowDuty.duty_state }}</div>
+      </div>
+      <div class="my-duty">
+        <div class="record-btn my-duty-btn">签到记录</div>
+        <div class="leave-btn my-duty-btn">值班请假</div>
       </div>
     </div>
     <el-divider />
@@ -248,6 +251,20 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.start-duty {
+  height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.sigb-btn-box {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .sign-btn {
   display: flex;
   flex-direction: column;
@@ -256,9 +273,19 @@ onUnmounted(() => {
   width: 200px;
   height: 200px;
   font-size: 60px;
-  color: white;
+  color: #008aff;
   border-radius: 4000px;
-  background-color: #008aff;
+  border: 3px solid #008aff;
+  background-color: white;
+  /* box-shadow: 0 0 10px 10px hsla(208, 80%, 61%, 0.498); */
+  transition:
+    box-shadow 0.25s,
+    transform 0.5s;
+}
+
+.sign-btn:hover {
+  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+  transform: scale(1.05, 1.05);
 }
 
 .now-duty {
@@ -268,18 +295,66 @@ onUnmounted(() => {
   align-items: center;
   font-size: 50px;
 }
+
+.now-duty-time {
+  font-size: 30px;
+}
+.now-duty-state {
+  border-radius: 25px;
+  font-size: 50px;
+  padding: 20px 20px;
+  /* border: 3px solid #008aff; */
+  color: #008aff;
+}
+
+.my-duty {
+  width: 300px;
+  /* height: 200px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-duty-btn {
+  font-size: 40px;
+  padding: 20px;
+  margin: 20px 0;
+  /* animation-name: slidein; */
+  transition:
+    box-shadow 0.25s,
+    transform 0.5s;
+}
+
+.record-btn {
+  color: #008aff;
+  background-color: white;
+  border-radius: 30px;
+  border: 3px solid #008aff;
+}
+
+.leave-btn {
+  color: #008aff;
+  background-color: white;
+  border-radius: 30px;
+  /* border: 3px solid #fe8a13; */
+  border: 3px solid #008aff;
+}
+
+.record-btn:hover {
+  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+  transform: scale(1.05, 1.05);
+}
+
+.leave-btn:hover {
+  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+  transform: scale(1.05, 1.05);
+}
+
 .main-layout {
   display: flex;
   flex-direction: column;
   justify-content: start;
-  align-items: center;
-}
-
-.start-duty {
-  height: 300px;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
   align-items: center;
 }
 
@@ -294,15 +369,5 @@ onUnmounted(() => {
 }
 .duty_divider {
   margin: 10px;
-}
-.now-duty-time {
-  font-size: 30px;
-}
-.now-duty-state {
-  border-radius: 25px;
-  font-size: 50px;
-  padding: 20px 20px;
-  /* border: 3px solid #008aff; */
-  color: #008aff;
 }
 </style>

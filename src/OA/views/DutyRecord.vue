@@ -1,6 +1,198 @@
-<script setup></script>
+<script setup>
+import { http } from 'assets/js/http'
+import { useUserStore } from 'store/store'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
+// import { fa } from 'element-plus/es/locale'
+let userStore = useUserStore()
+
+const tableRef = ref()
+
+let tableData = reactive([])
+let dateRange = ref('')
+let loading = ref(false)
+
+const filterHandler = (value, row, column) => {
+  const property = column['property']
+  return row[property] === value
+}
+
+function getDutyInfo() {
+  console.log(dateRange.value[0])
+  console.log(dateRange.value[1])
+  if (dateRange.value[0] == '' || dateRange.value[1] == '') {
+    errorAlert('请选择时间')
+    return
+  }
+  if (dateRange.value[0] === undefined || dateRange.value[1] === undefined) {
+    errorAlert('请选择时间')
+    return
+  }
+  loading.value = true
+  http
+    .post('/GetTotalDutyInRange/', {
+      start_time: dateRange.value[0],
+      end_time: dateRange.value[1]
+    })
+    .then((res) => {
+      console.log(res)
+      let data = res.data
+      tableData.length = 0
+      for (let i = 0; i < data.length; i++) {
+        let item = {
+          sdut_id: data[i].sdut_id,
+          unique_id: data[i].sdut_id + data[i].department,
+          name: data[i].name,
+          department: data[i].department,
+          identity: data[i].identity,
+          total_time: (data[i].total_time / 3600).toFixed(2),
+          absence: data[i].absence,
+          leave: data[i].leave
+        }
+        tableData.push(item)
+      }
+      successAlert('共找到' + tableData.length + '条值班信息')
+      loading.value = false
+    })
+    .catch(function (error) {
+      console.log(error)
+      errorAlert('获取值班信息失败')
+    })
+}
+onMounted(() => {
+  // getAllYoutholer()
+})
+
+const shortcuts = [
+  {
+    text: 'Last week',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 6)
+      return [start, end]
+    }
+  },
+  {
+    text: 'Last month',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 29)
+      return [start, end]
+    }
+  }
+  // ,
+  // {
+  //   text: 'Last 3 months',
+  //   value: () => {
+  //     const end = new Date()
+  //     const start = new Date()
+  //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+  //     return [start, end]
+  //   }
+  // }
+]
+</script>
 <template>
-  <div>DutyRecord</div>
+  <div class="main-layout">
+    <div class="options">
+      <div class="date-picker">
+        <!-- <div class="block"> -->
+        <!-- <span class="demonstration">With quick options</span> -->
+        <el-date-picker
+          v-model="dateRange"
+          type="daterange"
+          unlink-panels
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          value-format="YYYY-MM-DD"
+          size="large"
+          :shortcuts="shortcuts"
+        />
+        <!-- </div> -->
+      </div>
+      <div class="btn" @click="getDutyInfo">查询</div>
+    </div>
+    <el-divider />
+    <el-table
+      ref="tableRef"
+      class="table"
+      row-key="unique_id"
+      key="unique_id"
+      :data="tableData"
+      v-loading="loading"
+      size="large"
+    >
+      <el-table-column prop="name" label="姓名" sortable />
+      <el-table-column prop="sdut_id" label="学号" sortable />
+      <el-table-column
+        prop="department"
+        label="部门"
+        :filters="[
+          { text: '程序部', value: '程序部' },
+          { text: '美工部', value: '美工部' },
+          { text: '综合部', value: '综合部' },
+          { text: '闪客部', value: '闪客部' },
+          { text: '视频推广部', value: '视频推广部' },
+          { text: '摄影部', value: '摄影部' }
+        ]"
+        :filter-method="filterHandler"
+        sortable
+      />
+
+      <el-table-column prop="total_time" label="累计时长（小时）" sortable />
+      <el-table-column prop="absence" label="缺勤" sortable />
+      <el-table-column prop="leave" label="请假" sortable />
+
+      <el-table-column
+        prop="identity"
+        label="类别"
+        :filters="[
+          { text: '试用', value: '试用' },
+          { text: '正式', value: '正式' },
+          { text: '管理员', value: '管理员' }
+        ]"
+        :filter-method="filterHandler"
+        sortable
+      />
+    </el-table>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.main-layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.table {
+  width: 80%;
+}
+.options {
+  width: 100%;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  font-size: 20px;
+  margin: 8px 20px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #008aff;
+  background-color: white;
+  border: 3px #008aff solid;
+}
+
+.btn:hover {
+  color: white;
+  background-color: #008aff;
+}
+</style>

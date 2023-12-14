@@ -1,98 +1,76 @@
+<template>
+  <el-radio-group v-model="direction">
+    <el-radio label="ltr">left to right</el-radio>
+    <el-radio label="rtl">right to left</el-radio>
+    <el-radio label="ttb">top to bottom</el-radio>
+    <el-radio label="btt">bottom to top</el-radio>
+  </el-radio-group>
+
+  <el-button type="primary" style="margin-left: 16px" @click="drawer = true"> open </el-button>
+  <el-button type="primary" style="margin-left: 16px" @click="drawer2 = true">
+    with footer
+  </el-button>
+
+  <el-drawer
+    v-model="drawer"
+    title="I am the title"
+    :direction="direction"
+    :before-close="handleClose"
+  >
+    <template #default>
+      <div>
+        <el-radio v-model="radio1" label="Option 1" size="large">Option 1</el-radio>
+        <el-radio v-model="radio1" label="Option 2" size="large">Option 2</el-radio>
+      </div>
+    </template>
+  </el-drawer>
+
+  <el-drawer v-model="drawer2" :direction="direction">
+    <template #header>
+      <h4>set title by slot</h4>
+    </template>
+    <template #default>
+      <div>
+        <el-radio v-model="radio1" label="Option 1" size="large">Option 1</el-radio>
+        <el-radio v-model="radio1" label="Option 2" size="large">Option 2</el-radio>
+      </div>
+    </template>
+    <template #footer>
+      <div style="flex: auto">
+        <el-button @click="cancelClick">cancel</el-button>
+        <el-button type="primary" @click="confirmClick">confirm</el-button>
+      </div>
+    </template>
+  </el-drawer>
+</template>
+
 <script setup>
 import { ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
 
-const tableRef = ref()
-
-const resetDateFilter = () => {
-  tableRef.value.clearFilter(['date'])
+const drawer = ref(false)
+const drawer2 = ref(false)
+const direction = ref('rtl')
+const radio1 = ref('Option 1')
+const handleClose = (done) => {
+  ElMessageBox.confirm('Are you sure you want to close this?')
+    .then(() => {
+      done()
+    })
+    .catch(() => {
+      // catch error
+    })
 }
-
-const clearFilter = () => {
-  tableRef.value.clearFilter()
+function cancelClick() {
+  drawer2.value = false
 }
-
-const formatter = (row, column) => {
-  let res = '地址是：' + row.address
-
-  return res
+function confirmClick() {
+  ElMessageBox.confirm(`Are you confirm to chose ${radio1.value} ?`)
+    .then(() => {
+      drawer2.value = false
+    })
+    .catch(() => {
+      // catch error
+    })
 }
-
-const filterTag = (value, row) => {
-  return row.tag === value
-}
-
-const filterHandler = (value, row, column) => {
-  const property = column['property']
-  return row[property] === value
-}
-
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Home'
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Office'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Home'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    tag: 'Office'
-  }
-]
 </script>
-
-<template>
-  <el-button @click="resetDateFilter">reset date filter</el-button>
-  <el-button @click="clearFilter">reset all filters</el-button>
-  <el-table ref="tableRef" row-key="date" :data="tableData" style="width: 100%">
-    <el-table-column
-      prop="date"
-      label="Date"
-      sortable
-      width="180"
-      column-key="date"
-      :filters="[
-        { text: '2016-05-01', value: '2016-05-01' },
-        { text: '2016-05-02', value: '2016-05-02' },
-        { text: '2016-05-03', value: '2016-05-03' },
-        { text: '2016-05-04', value: '2016-05-04' }
-      ]"
-      :filter-method="filterHandler"
-    />
-    <el-table-column prop="name" label="Name" sortable />
-    <el-table-column prop="name" label="Name" sortable />
-
-    <el-table-column prop="address" label="Address" :formatter="formatter" />
-
-    <el-table-column
-      prop="tag"
-      label="Tag"
-      width="100"
-      :filters="[
-        { text: 'Home', value: 'Home' },
-        { text: 'Office', value: 'Office' }
-      ]"
-      :filter-method="filterTag"
-      filter-placement="bottom-end"
-    >
-      <template #default="scope">
-        <el-tag :type="scope.row.tag === 'Home' ? '' : 'success'" disable-transitions>{{
-          scope.row.tag
-        }}</el-tag>
-      </template>
-    </el-table-column>
-  </el-table>
-</template>

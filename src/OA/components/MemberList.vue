@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, reactive } from 'vue'
-import { http } from '../../assets/js/http'
+import { http } from 'assets/js/http'
 
 let propData = defineProps({
   title: {

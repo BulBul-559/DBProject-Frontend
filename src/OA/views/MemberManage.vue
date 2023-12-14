@@ -1,10 +1,10 @@
 <script setup>
-import { http } from '../../assets/js/http'
-import { useUserStore } from '../../store/store'
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { http } from 'assets/js/http'
+// import { useUserStore } from 'store/store'
+import { ref, reactive, onMounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
-let userStore = useUserStore()
 
+// let userStore = useUserStore()
 const tableRef = ref()
 
 // const clearFilter = () => {
@@ -38,6 +38,23 @@ const filterHandler = (value, row, column) => {
 
 let tableData = reactive([])
 
+let drawer = ref(false)
+
+let departmentOption = [
+  { label: '程序部', value: '程序部' },
+  { label: '美工部', value: '美工部' },
+  { label: '综合部', value: '综合部' },
+  { label: '闪客部', value: '闪客部' },
+  { label: '视频推广部', value: '视频推广部' },
+  { label: '摄影部', value: '摄影部' }
+]
+
+let identityOption = [
+  { label: '试用', value: '试用' },
+  { label: '正式', value: '正式' },
+  { label: '管理员', value: '管理员' }
+]
+
 function getAllYoutholer() {
   http
     .post('/GetAllYoutholer/', {})
@@ -60,17 +77,55 @@ function getAllYoutholer() {
       errorAlert('获取成员信息失败')
     })
 }
-onMounted(() => {
-  getAllYoutholer()
-})
 
-const handleEdit = (index, row) => {
-  console.log(row.sdut_id)
+function modifyMemberInfo() {
+  http
+    .post('/modifySingleYoutholInfo/', {
+      sdut_id: memberInfo.sdut_id,
+      department: memberInfo.department,
+      name: memberInfo.name,
+      identity: memberInfo.identity
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  successAlert('修改成功')
+  drawer.value = false
 }
-const handleDelete = (index, row) => {
-  console.log(index, row)
+
+let handleClose = (done) => {
+  memberInfo.sdut_id = 0
+  memberInfo.department = ''
+  memberInfo.name = ''
+  memberInfo.identity = ''
+  done()
+}
+const handleEdit = (index, row) => {
+  memberInfo.sdut_id = row.sdut_id
+  memberInfo.department = row.department
+  memberInfo.name = row.name
+  memberInfo.identity = row.identity
+  drawer.value = true
+  console.log(row)
+}
+
+const handleDelete = () => {
+  // console.log()
 
   const success = () => {
+    http
+      .post('/deletYoutholer/', {
+        sdut_id: memberInfo.sdut_id
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     console.log('Deleted success')
   }
   const error = () => {
@@ -78,7 +133,7 @@ const handleDelete = (index, row) => {
   }
 
   let title = '删除成员'
-  let text = '确定要删除 ' + row.name + ' 吗？'
+  let text = '确定要删除 ' + memberInfo.name + ' 吗？'
   let confirmText = '确定删除'
   let cancelText = '取消'
 
@@ -88,6 +143,19 @@ const handleDelete = (index, row) => {
 function addOneYouthol() {}
 
 function addManyYouthol() {}
+
+// const labelPosition = ref < FormProps['labelPosition'] > 'right'
+
+const memberInfo = reactive({
+  sdut_id: 0,
+  name: '',
+  department: '',
+  identity: ''
+})
+
+onMounted(() => {
+  getAllYoutholer()
+})
 </script>
 <template>
   <div class="main-layout">
@@ -127,10 +195,47 @@ function addManyYouthol() {}
       <el-table-column prop="option" label="操作">
         <template #default="scope">
           <el-button @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-          <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+          <!-- <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button> -->
         </template>
       </el-table-column>
     </el-table>
+
+    <el-drawer v-model="drawer" title="编辑成员信息" direction="rtl" :before-close="handleClose">
+      <template #default>
+        <el-form
+          label-position="top"
+          label-width="100px"
+          :model="memberInfo"
+          style="max-width: 460px"
+        >
+          <el-form-item label="姓名">
+            <el-input v-model="memberInfo.name" />
+          </el-form-item>
+          <el-form-item label="部门">
+            <el-select v-model="memberInfo.department" class="m-2" placeholder="Select">
+              <el-option
+                v-for="item in departmentOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="类别">
+            <el-select v-model="memberInfo.identity" class="m-2" placeholder="Select">
+              <el-option
+                v-for="item in identityOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-button type="primary" plain @click="modifyMemberInfo">确认修改</el-button>
+          <el-button type="danger" plain @click="handleDelete">删除成员</el-button>
+        </el-form>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
@@ -165,7 +270,7 @@ function addManyYouthol() {}
 }
 
 .add-btn:hover {
-  color:  white;
-  background-color: #008aff ;
+  color: white;
+  background-color: #008aff;
 }
 </style>

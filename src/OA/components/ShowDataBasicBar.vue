@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import * as echarts from 'echarts'
-import { http } from '../assets/js/http'
+import { http } from 'assets/js/http'
 
 let propData = defineProps({
   title: {
@@ -107,7 +107,7 @@ onMounted(() => {
 .chart {
   width: var(--width);
   height: var(--height);
-    display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;

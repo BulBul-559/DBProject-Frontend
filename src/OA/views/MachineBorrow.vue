@@ -1,5 +1,5 @@
 <script setup>
-import { useUserStore } from '../../store/store.js'
+import { useUserStore } from 'store/store.js'
 
 let userStore = useUserStore()
 </script>
@@ -7,5 +7,4 @@ let userStore = useUserStore()
   <div>This is Machine Borrow</div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
