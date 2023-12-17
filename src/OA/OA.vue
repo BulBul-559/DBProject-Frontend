@@ -44,17 +44,19 @@ function verifySignIn() {
       })
       // store.$patch({ sdut_id: res.data.sdut_id })
       console.log('已登录')
+      return true
     })
     .catch(function (error) {
       console.log(error)
       userStore.$patch({ sdut_id: 'no id', is_login: false })
+      return false
     })
 }
 
 function Logout() {
   localStorage.removeItem('YoutholAccessToken')
   userStore.$patch({ sdut_id: '', is_login: false })
-  window.location.href = '/'
+  window.location.href = '/youthol/'
 }
 
 function checkDuty() {
@@ -84,9 +86,9 @@ onMounted(() => {
     //先检查 pinia
     checkDuty()
     return
-  } else if (verifySignIn() == false) {
+  } else if (verifySignIn() === false) {
     //未登录重定向
-    window.location.href = '/'
+    window.location.href = '/youthol/'
   } else {
     checkDuty()
   }
@@ -208,9 +210,7 @@ onMounted(() => {
 .aside-nav {
   height: 100%;
   width: 200px;
-  /* background-color: #0058a5; */
   background-color: #008aff;
-  /* background-color: #f68512; */
   font-size: 18px;
   display: flex;
   flex-direction: column;

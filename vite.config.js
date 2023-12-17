@@ -12,7 +12,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: 'index.html',
+        main: '/index.html',
         login: '/login/index.html',
         oa: '/OA/index.html'
         // main: resolve(__dirname, 'index.html'),

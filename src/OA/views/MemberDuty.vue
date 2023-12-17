@@ -23,6 +23,14 @@ let nowDuty = reactive({
   timer: ''
 })
 
+const debounce = (function () {
+  let timer = 0
+  return function (callback, ms = 200) {
+    //设置默认200ms
+    clearTimeout(timer)
+    timer = setTimeout(callback, ms)
+  }
+})()
 // function getLocation() {
 //   let lat = 0
 //   let longt = 0
@@ -45,35 +53,42 @@ let nowDuty = reactive({
 // }
 
 function startDuty() {
-  http
-    .post('/StartDuty/', {
-      sdut_id: userStore.sdut_id
-    })
-    .then((res) => {
-      is_duty.value = true
-      successAlert('签到成功')
-      let data = res.data
-
-      // 存到 pinia 中
-      userStore.$patch({
-        is_login: true,
-        duty_start_time: data.start_time,
-        duty_state: data.duty_state
+  debounce(async () => {
+    http
+      .post('/StartDuty/', {
+        sdut_id: userStore.sdut_id
       })
-      is_duty.value = true
-      nowDuty.start_time = data.start_time
-      nowDuty.duty_state = data.duty_state
+      .then((res) => {
+        if (res.data == '签到失败') {
+          errorAlert('签到失败')
+          return
+        }
 
-      nowDuty.timer = setInterval(() => {
-        nowDuty.pass_time = getTime(nowDuty.start_time)
-      }, 1000)
+        is_duty.value = true
+        successAlert('签到成功')
+        let data = res.data
 
-      console.log(res)
-    })
-    .catch(function (error) {
-      console.log(error)
-      errorAlert('签到失败')
-    })
+        // 存到 pinia 中
+        userStore.$patch({
+          is_login: true,
+          duty_start_time: data.start_time,
+          duty_state: data.duty_state
+        })
+        is_duty.value = true
+        nowDuty.start_time = data.start_time
+        nowDuty.duty_state = data.duty_state
+
+        nowDuty.timer = setInterval(() => {
+          nowDuty.pass_time = getTime(nowDuty.start_time)
+        }, 1000)
+
+        console.log(res)
+      })
+      .catch(function (error) {
+        console.log(error)
+        errorAlert('签到失败')
+      })
+  }, 500)
 }
 
 function toSecond(time) {
@@ -259,7 +274,8 @@ onUnmounted(() => {
   align-items: center;
 }
 .sigb-btn-box {
-  width: 300px;
+  width: 30%;
+  /* width: 250px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -289,6 +305,7 @@ onUnmounted(() => {
 }
 
 .now-duty {
+  width: 40%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -308,7 +325,8 @@ onUnmounted(() => {
 }
 
 .my-duty {
-  width: 300px;
+  width: 30%;
+  /* width: 250px; */
   /* height: 200px; */
   display: flex;
   flex-direction: column;

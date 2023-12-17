@@ -1,76 +1,100 @@
 <template>
-  <el-radio-group v-model="direction">
-    <el-radio label="ltr">left to right</el-radio>
-    <el-radio label="rtl">right to left</el-radio>
-    <el-radio label="ttb">top to bottom</el-radio>
-    <el-radio label="btt">bottom to top</el-radio>
-  </el-radio-group>
-
-  <el-button type="primary" style="margin-left: 16px" @click="drawer = true"> open </el-button>
-  <el-button type="primary" style="margin-left: 16px" @click="drawer2 = true">
-    with footer
-  </el-button>
-
-  <el-drawer
-    v-model="drawer"
-    title="I am the title"
-    :direction="direction"
-    :before-close="handleClose"
-  >
-    <template #default>
-      <div>
-        <el-radio v-model="radio1" label="Option 1" size="large">Option 1</el-radio>
-        <el-radio v-model="radio1" label="Option 2" size="large">Option 2</el-radio>
-      </div>
-    </template>
-  </el-drawer>
-
-  <el-drawer v-model="drawer2" :direction="direction">
-    <template #header>
-      <h4>set title by slot</h4>
-    </template>
-    <template #default>
-      <div>
-        <el-radio v-model="radio1" label="Option 1" size="large">Option 1</el-radio>
-        <el-radio v-model="radio1" label="Option 2" size="large">Option 2</el-radio>
-      </div>
-    </template>
-    <template #footer>
-      <div style="flex: auto">
-        <el-button @click="cancelClick">cancel</el-button>
-        <el-button type="primary" @click="confirmClick">confirm</el-button>
-      </div>
-    </template>
-  </el-drawer>
+  <div class="m-4">
+    <p>default</p>
+    <el-select v-model="value1" multiple placeholder="Select" style="width: 240px">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+  </div>
+  <div class="m-4">
+    <p>use collapse-tags</p>
+    <el-select v-model="value2" multiple collapse-tags placeholder="Select" style="width: 240px">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+  </div>
+  <div class="m-4">
+    <p>use collapse-tags-tooltip</p>
+    <el-select
+      v-model="value3"
+      multiple
+      collapse-tags
+      collapse-tags-tooltip
+      placeholder="Select"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+  </div>
+  <div class="m-4">
+    <p>use max-collapse-tags</p>
+    <el-select
+      v-model="value4"
+      multiple
+      collapse-tags
+      collapse-tags-tooltip
+      :max-collapse-tags="3"
+      placeholder="Select"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+  </div>
+  <button @click="dis">dis</button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { ElMessageBox } from 'element-plus'
 
-const drawer = ref(false)
-const drawer2 = ref(false)
-const direction = ref('rtl')
-const radio1 = ref('Option 1')
-const handleClose = (done) => {
-  ElMessageBox.confirm('Are you sure you want to close this?')
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
+const value1 = ref([])
+const value2 = ref([])
+const value3 = ref([])
+const value4 = ref([])
+
+function dis() {
+  console.log(value1.value)
+  console.log(value2.value)
+  console.log(value3.value)
+  console.log(value4.value)
 }
-function cancelClick() {
-  drawer2.value = false
-}
-function confirmClick() {
-  ElMessageBox.confirm(`Are you confirm to chose ${radio1.value} ?`)
-    .then(() => {
-      drawer2.value = false
-    })
-    .catch(() => {
-      // catch error
-    })
-}
+const options = [
+  {
+    value: 'Option1',
+    label: 'Option1'
+  },
+  {
+    value: 'Option2',
+    label: 'Option2'
+  },
+  {
+    value: 'Option3',
+    label: 'Option3'
+  },
+  {
+    value: 'Option4',
+    label: 'Option4'
+  },
+  {
+    value: 'Option5',
+    label: 'Option5'
+  }
+]
 </script>

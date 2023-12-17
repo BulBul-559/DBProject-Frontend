@@ -18,8 +18,11 @@ const filterHandler = (value, row, column) => {
 }
 
 function getDutyInfo() {
-  console.log(dateRange.value[0])
-  console.log(dateRange.value[1])
+  if (loading.value == true) {
+    errorAlert('正在获取数据，请稍后')
+    return
+  }
+
   if (dateRange.value[0] == '' || dateRange.value[1] == '') {
     errorAlert('请选择时间')
     return
@@ -28,6 +31,7 @@ function getDutyInfo() {
     errorAlert('请选择时间')
     return
   }
+
   loading.value = true
   http
     .post('/GetTotalDutyInRange/', {
@@ -65,7 +69,26 @@ onMounted(() => {
 
 const shortcuts = [
   {
-    text: 'Last week',
+    text: '今天',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      // start.setTime(start.getTime() - 3600 * 1000 * 24 * 6)
+      return [start, end]
+    }
+  },
+  {
+    text: '昨天',
+    value: () => {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24)
+      end.setTime(end.getTime() - 3600 * 1000 * 24)
+      return [start, end]
+    }
+  },
+  {
+    text: '过去一周',
     value: () => {
       const end = new Date()
       const start = new Date()
@@ -74,7 +97,7 @@ const shortcuts = [
     }
   },
   {
-    text: 'Last month',
+    text: '过去一个月',
     value: () => {
       const end = new Date()
       const start = new Date()
@@ -82,16 +105,6 @@ const shortcuts = [
       return [start, end]
     }
   }
-  // ,
-  // {
-  //   text: 'Last 3 months',
-  //   value: () => {
-  //     const end = new Date()
-  //     const start = new Date()
-  //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-  //     return [start, end]
-  //   }
-  // }
 ]
 </script>
 <template>

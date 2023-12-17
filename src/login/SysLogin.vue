@@ -58,7 +58,7 @@ function signIn() {
         //存储 token
         localStorage.setItem('YoutholAccessToken', token)
         //跳转到首页
-        window.location.href = '/'
+        window.location.href = '/youthol/'
       } else if (data.SignState == '账号或密码错误') {
         errorAlert('账号或密码错误')
       } else {
@@ -98,15 +98,7 @@ function signIn() {
 
 function verifySignIn() {
   http
-    .post(
-      '/getUserInfo/',
-      {},
-      {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('YoutholAccessToken')
-        }
-      }
-    )
+    .post('/getUserInfo/', {})
     .then((res) => {
       // 在这里设置 Pinia状态？
       console.log(res)

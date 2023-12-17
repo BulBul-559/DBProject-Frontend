@@ -3,73 +3,103 @@ import { http } from 'assets/js/http'
 // import { useUserStore } from 'store/store'
 import { ref, reactive, onMounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
+import modifyMemberInfo from '../components/modifyMemberInfo.vue'
 
 // let userStore = useUserStore()
-const tableRef = ref()
 
-// const clearFilter = () => {
-//   tableRef.value.clearFilter()
-// }
+let tableData = reactive([])
+let drawer = ref(false)
+let loading = ref(true)
+let tableRef = ref()
+let editInfo = reactive({
+  sdut_id: 0,
+  name: '',
+  department: '',
+  identity: '',
+  duty: []
+})
 
-// const formatter = (row, column) => {
-//   let res = '地址是：' + row.address
-
-//   return res
-// }
-
-// const filterTag = (value, row) => {
-//   return row.tag === value
-// }
-
+const formatter = (data) => {
+  let duty_list = data.duty
+  let res = ''
+  for (let i = 0; i < duty_list.length; i++) {
+    if (i == 0) res = '周'
+    else res += '，周'
+    switch (duty_list[i].day) {
+      case 1:
+        res += '一'
+        break
+      case 2:
+        res += '二'
+        break
+      case 3:
+        res += '三'
+        break
+      case 4:
+        res += '四'
+        break
+      case 5:
+        res += '五'
+        break
+      case 6:
+        res += '六'
+        break
+      case 7:
+        res += '日'
+        break
+    }
+    switch (duty_list[i].frame) {
+      case 1:
+        res += '12节'
+        break
+      case 2:
+        res += '34节'
+        break
+      case 3:
+        res += '56节'
+        break
+      case 4:
+        res += '78节'
+        break
+      case 5:
+        res += '910节'
+    }
+  }
+  return res
+}
 const filterHandler = (value, row, column) => {
   const property = column['property']
   return row[property] === value
 }
-
-// const tableData = [
-//   {
-//     name: '',
-//     sdut_id: '',
-//     department: '',
-//     identity: '',
-//     option: ''
-//   }
-// ]
-
-let tableData = reactive([])
-
-let drawer = ref(false)
-
-let departmentOption = [
-  { label: '程序部', value: '程序部' },
-  { label: '美工部', value: '美工部' },
-  { label: '综合部', value: '综合部' },
-  { label: '闪客部', value: '闪客部' },
-  { label: '视频推广部', value: '视频推广部' },
-  { label: '摄影部', value: '摄影部' }
-]
-
-let identityOption = [
-  { label: '试用', value: '试用' },
-  { label: '正式', value: '正式' },
-  { label: '管理员', value: '管理员' }
-]
+const filterDutyHandler = (value, row, column) => {
+  const property = column['property']
+  let duty = row[property]
+  for (let i = 0; i < duty.length; i++) {
+    if (duty[i].day == value) {
+      return true
+    }
+  }
+  return false
+}
 
 function getAllYoutholer() {
+  loading.value = true
   http
     .post('/GetAllYoutholer/', {})
     .then((res) => {
-      console.log(res)
       let data = res.data
+      tableData.length = 0
       for (let i = 0; i < data.length; i++) {
         let item = {
           sdut_id: data[i].sdut_id,
           unique_id: data[i].sdut_id + data[i].department,
           name: data[i].name,
           department: data[i].department,
-          identity: data[i].identity
+          identity: data[i].identity,
+          duty: data[i].duty
         }
         tableData.push(item)
+        loading.value = false
       }
     })
     .catch(function (error) {
@@ -78,66 +108,27 @@ function getAllYoutholer() {
     })
 }
 
-function modifyMemberInfo() {
-  http
-    .post('/modifySingleYoutholInfo/', {
-      sdut_id: memberInfo.sdut_id,
-      department: memberInfo.department,
-      name: memberInfo.name,
-      identity: memberInfo.identity
-    })
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  successAlert('修改成功')
-  drawer.value = false
-}
-
-let handleClose = (done) => {
-  memberInfo.sdut_id = 0
-  memberInfo.department = ''
-  memberInfo.name = ''
-  memberInfo.identity = ''
-  done()
-}
-const handleEdit = (index, row) => {
-  memberInfo.sdut_id = row.sdut_id
-  memberInfo.department = row.department
-  memberInfo.name = row.name
-  memberInfo.identity = row.identity
-  drawer.value = true
-  console.log(row)
-}
-
-const handleDelete = () => {
-  // console.log()
-
-  const success = () => {
-    http
-      .post('/deletYoutholer/', {
-        sdut_id: memberInfo.sdut_id
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    console.log('Deleted success')
+const editMember = (index, row) => {
+  editInfo.sdut_id = row.sdut_id
+  editInfo.department = row.department
+  editInfo.name = row.name
+  editInfo.identity = row.identity
+  let duty_list = []
+  for (let i = 0; i < row.duty.length; i++) {
+    duty_list.push({ day: row.duty[i].day, frame: row.duty[i].frame })
   }
-  const error = () => {
-    console.log('Cancel Deleted')
+  while (duty_list.length < 2) {
+    duty_list.push({ day: '0', frame: '0' })
   }
+  editInfo.duty = duty_list
+  // console.log(row.duty)
+  console.log(editInfo)
+  displayMemberEdit(true)
+}
 
-  let title = '删除成员'
-  let text = '确定要删除 ' + memberInfo.name + ' 吗？'
-  let confirmText = '确定删除'
-  let cancelText = '取消'
-
-  messageBox(text, title, confirmText, cancelText, success, error)
+function displayMemberEdit(res) {
+  console.log(res)
+  drawer.value = res
 }
 
 function addOneYouthol() {}
@@ -145,13 +136,6 @@ function addOneYouthol() {}
 function addManyYouthol() {}
 
 // const labelPosition = ref < FormProps['labelPosition'] > 'right'
-
-const memberInfo = reactive({
-  sdut_id: 0,
-  name: '',
-  department: '',
-  identity: ''
-})
 
 onMounted(() => {
   getAllYoutholer()
@@ -164,10 +148,18 @@ onMounted(() => {
       <div class="add-btn" @click="addManyYouthol">批量导入</div>
     </div>
 
-    <el-table ref="tableRef" class="table" row-key="unique_id" :data="tableData" size="large">
-      <el-table-column prop="name" label="姓名" sortable />
-      <el-table-column prop="sdut_id" label="学号" sortable />
+    <el-table
+      ref="tableRef"
+      class="table"
+      row-key="unique_id"
+      v-loading="loading"
+      :data="tableData"
+      size="large"
+    >
+      <el-table-column align="center" prop="name" label="姓名" sortable />
+      <el-table-column align="center" prop="sdut_id" label="学号" sortable />
       <el-table-column
+        align="center"
         prop="department"
         label="部门"
         :filters="[
@@ -182,6 +174,7 @@ onMounted(() => {
         sortable
       />
       <el-table-column
+        align="center"
         prop="identity"
         label="类别"
         :filters="[
@@ -192,50 +185,36 @@ onMounted(() => {
         :filter-method="filterHandler"
         sortable
       />
-      <el-table-column prop="option" label="操作">
+      <el-table-column
+        align="center"
+        prop="duty"
+        label="值班安排"
+        :formatter="formatter"
+        :filters="[
+          { text: '周一', value: '1' },
+          { text: '周二', value: '2' },
+          { text: '周三', value: '3' },
+          { text: '周四', value: '4' },
+          { text: '周五', value: '5' },
+          { text: '周六', value: '6' },
+          { text: '周日', value: '7' }
+        ]"
+        :filter-method="filterDutyHandler"
+      />
+      <el-table-column align="center" prop="option" label="操作">
         <template #default="scope">
-          <el-button @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+          <el-button @click="editMember(scope.$index, scope.row)">Edit</el-button>
           <!-- <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button> -->
         </template>
       </el-table-column>
     </el-table>
 
-    <el-drawer v-model="drawer" title="编辑成员信息" direction="rtl" :before-close="handleClose">
-      <template #default>
-        <el-form
-          label-position="top"
-          label-width="100px"
-          :model="memberInfo"
-          style="max-width: 460px"
-        >
-          <el-form-item label="姓名">
-            <el-input v-model="memberInfo.name" />
-          </el-form-item>
-          <el-form-item label="部门">
-            <el-select v-model="memberInfo.department" class="m-2" placeholder="Select">
-              <el-option
-                v-for="item in departmentOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="类别">
-            <el-select v-model="memberInfo.identity" class="m-2" placeholder="Select">
-              <el-option
-                v-for="item in identityOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
-          <el-button type="primary" plain @click="modifyMemberInfo">确认修改</el-button>
-          <el-button type="danger" plain @click="handleDelete">删除成员</el-button>
-        </el-form>
-      </template>
-    </el-drawer>
+    <modifyMemberInfo
+      @displayMemberEdit="displayMemberEdit"
+      @getInfo="getAllYoutholer"
+      :drawer="drawer"
+      :info="editInfo"
+    ></modifyMemberInfo>
   </div>
 </template>
 
