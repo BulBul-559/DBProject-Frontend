@@ -245,7 +245,13 @@ onMounted(() => {
 })
 </script>
 <template>
-  <el-drawer :modelValue="drawer" title="值班请假" direction="rtl" :before-close="handleClose">
+  <el-drawer
+    size="50%"
+    :modelValue="drawer"
+    title="值班请假"
+    direction="rtl"
+    :before-close="handleClose"
+  >
     <template #default>
       <el-form label-position="top" label-width="100px" :model="leaveInfo" style="max-width: 460px">
         <el-form-item prop="leaveChoice" label="时间">
