@@ -21,13 +21,28 @@ let lookData = ref('排名')
 </template>
 
 <style scoped>
-.exhibit-info {
-  width: 100%;
-  font-size: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-color: #9dffa0; */
+@media only screen and (min-width: 768px) {
+  /* for desktop */
+  .exhibit-info {
+    width: 100%;
+    font-size: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #9dffa0; */
+  }
+}
+@media only screen and (max-width: 768px) {
+  /* for phone */
+  .exhibit-info {
+    width: 100%;
+    font-size: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #9dffa0; */
+  }
 }
 </style>

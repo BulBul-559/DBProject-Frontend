@@ -6,9 +6,13 @@ let youthol_title = ref()
 // var chartDom = document.getElementById('main');
 
 onMounted(() => {
-  var myChart = echarts.init(youthol_title.value)
-  var option
-
+  let myChart = echarts.init(youthol_title.value)
+  let option
+  let width = window.innerWidth
+  let font_size = 140
+  if (width < 768) {
+    font_size = 100
+  }
   option = {
     graphic: {
       elements: [
@@ -18,7 +22,7 @@ onMounted(() => {
           top: 'center',
           style: {
             text: 'Youthol',
-            fontSize: 140,
+            fontSize: font_size,
             fontWeight: 'bold',
             lineDash: [0, 200],
             lineDashOffset: 0,

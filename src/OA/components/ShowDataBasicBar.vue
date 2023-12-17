@@ -8,14 +8,11 @@ let propData = defineProps({
     default: ''
   },
   xData: {},
-  seriesData: {},
-  _width: {
-    default: '65%'
-  },
-  _height: {
-    default: '620px'
-  }
+  seriesData: {}
 })
+
+let _width = ref('65%')
+let _height = ref('620px')
 let showData = ref()
 
 function initChart(xData, seriesData) {
@@ -42,7 +39,8 @@ function initChart(xData, seriesData) {
     ]
   })
 }
-onMounted(() => {
+
+function getTodatDuty() {
   http
     .post('/getTodayDuty/')
     .then((res) => {
@@ -96,6 +94,14 @@ onMounted(() => {
     .catch(function (error) {
       console.log(error)
     })
+}
+onMounted(() => {
+  let width = window.innerWidth
+  // let height = window.innerHeight
+  if (width < 768) {
+    _height.value = '400px'
+  }
+  getTodatDuty()
 })
 </script>
 

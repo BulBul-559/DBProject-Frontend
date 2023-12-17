@@ -25,6 +25,7 @@ const formatterEndTime = (data) => {
 }
 
 let tableData = reactive([])
+let _size = ref('50%')
 
 let handleClose = (done) => {
   emit('displayRecord', false)
@@ -65,12 +66,17 @@ function getMyDutyRecord() {
 }
 
 onMounted(() => {
+  let width = window.innerWidth
+  // let height = window.innerHeight
+  if (width < 768) {
+    _size.value = '90%'
+  }
   getMyDutyRecord()
 })
 </script>
 <template>
   <el-drawer
-    size="50%"
+    :size="_size"
     :modelValue="drawer"
     title="值班记录"
     direction="rtl"

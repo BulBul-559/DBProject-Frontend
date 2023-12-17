@@ -73,6 +73,7 @@ let leaveInfo = reactive({
 })
 let dutyOption = reactive([])
 let allow = ref(false)
+let _size = ref('50%')
 
 function postLeaveApply() {
   http
@@ -240,13 +241,18 @@ function getLeaveRecord() {
     })
 }
 onMounted(() => {
+  let width = window.innerWidth
+  // let height = window.innerHeight
+  if (width < 768) {
+    _size.value = '90%'
+  }
   getDutyInfo()
   getLeaveRecord()
 })
 </script>
 <template>
   <el-drawer
-    size="50%"
+    :size="_size"
     :modelValue="drawer"
     title="值班请假"
     direction="rtl"

@@ -342,116 +342,230 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.start-duty {
-  height: 300px;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-.sigb-btn-box {
-  width: 30%;
-  /* width: 250px; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.sign-btn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  height: 200px;
-  font-size: 60px;
-  color: #008aff;
-  border-radius: 4000px;
-  border: 3px solid #008aff;
-  background-color: white;
-  /* box-shadow: 0 0 10px 10px hsla(208, 80%, 61%, 0.498); */
-  transition:
-    box-shadow 0.25s,
-    transform 0.5s;
-}
+@media only screen and (min-width: 768px) {
+  /* for dektop */
+  .start-duty {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .sigb-btn-box {
+    width: 30%;
+    /* width: 250px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .sign-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    font-size: 60px;
+    color: #008aff;
+    border-radius: 4000px;
+    border: 3px solid #008aff;
+    background-color: white;
+    /* box-shadow: 0 0 10px 10px hsla(208, 80%, 61%, 0.498); */
+    transition:
+      box-shadow 0.25s,
+      transform 0.5s;
+  }
 
-.sign-btn:hover {
-  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-  transform: scale(1.05, 1.05);
-}
+  .sign-btn:hover {
+    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+    transform: scale(1.05, 1.05);
+  }
 
-.now-duty {
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
-}
+  .now-duty {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+  }
 
-.now-duty-time {
-  font-size: 30px;
-}
-.now-duty-state {
-  border-radius: 25px;
-  font-size: 50px;
-  padding: 20px 20px;
-  /* border: 3px solid #008aff; */
-  color: #008aff;
-}
+  .now-duty-time {
+    font-size: 30px;
+  }
+  .now-duty-state {
+    border-radius: 25px;
+    font-size: 50px;
+    padding: 20px 20px;
+    /* border: 3px solid #008aff; */
+    color: #008aff;
+  }
 
-.my-duty {
-  width: 30%;
-  /* width: 250px; */
-  /* height: 200px; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  .my-duty {
+    width: 30%;
+    /* width: 250px; */
+    /* height: 200px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-.my-duty-btn {
-  font-size: 40px;
-  padding: 20px;
-  margin: 20px 0;
-  /* animation-name: slidein; */
-  transition:
-    box-shadow 0.25s,
-    transform 0.5s;
-}
+  .my-duty-btn {
+    font-size: 40px;
+    padding: 20px;
+    margin: 20px 0;
+    /* animation-name: slidein; */
+    transition:
+      box-shadow 0.25s,
+      transform 0.5s;
+  }
 
-.record-btn {
-  color: #008aff;
-  background-color: white;
-  border-radius: 30px;
-  border: 3px solid #008aff;
-}
+  .record-btn {
+    color: #008aff;
+    background-color: white;
+    border-radius: 30px;
+    border: 3px solid #008aff;
+  }
 
-.leave-btn {
-  color: #008aff;
-  background-color: white;
-  border-radius: 30px;
-  /* border: 3px solid #fe8a13; */
-  border: 3px solid #008aff;
-}
+  .leave-btn {
+    color: #008aff;
+    background-color: white;
+    border-radius: 30px;
+    /* border: 3px solid #fe8a13; */
+    border: 3px solid #008aff;
+  }
 
-.record-btn:hover {
-  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-  transform: scale(1.05, 1.05);
-}
+  .record-btn:hover {
+    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+    transform: scale(1.05, 1.05);
+  }
 
-.leave-btn:hover {
-  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-  transform: scale(1.05, 1.05);
-}
+  .leave-btn:hover {
+    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+    transform: scale(1.05, 1.05);
+  }
 
-.main-layout {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  .duty_divider {
+    margin: 10px;
+  }
 }
-.duty_divider {
-  margin: 10px;
+@media only screen and (max-width: 768px) {
+  /* for phone */
+  .start-duty {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .sigb-btn-box {
+    width: 30%;
+    /* width: 250px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .sign-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    font-size: 40px;
+    color: #008aff;
+    border-radius: 4000px;
+    border: 3px solid #008aff;
+    background-color: white;
+    transition:
+      box-shadow 0.25s,
+      transform 0.5s;
+  }
+
+  .sign-btn:hover {
+    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+    transform: scale(1.05, 1.05);
+  }
+
+  .now-duty {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+  }
+
+  .now-duty-time {
+    font-size: 20px;
+  }
+  .now-duty-state {
+    border-radius: 25px;
+    font-size: 35px;
+    padding: 20px 20px;
+    color: #008aff;
+  }
+
+  .my-duty {
+    width: 100%;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .my-duty-btn {
+    font-size: 25px;
+    padding: 15px;
+    margin: 10px;
+    transition:
+      box-shadow 0.25s,
+      transform 0.5s;
+  }
+
+  .record-btn {
+    color: #008aff;
+    background-color: white;
+    border-radius: 20px;
+    border: 3px solid #008aff;
+  }
+
+  .leave-btn {
+    color: #008aff;
+    background-color: white;
+    border-radius: 20px;
+    /* border: 3px solid #fe8a13; */
+    border: 3px solid #008aff;
+  }
+
+  .record-btn:hover {
+    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+    transform: scale(1.05, 1.05);
+  }
+
+  .leave-btn:hover {
+    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+    transform: scale(1.05, 1.05);
+  }
+
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  .duty_divider {
+    margin: 10px;
+  }
 }
 </style>

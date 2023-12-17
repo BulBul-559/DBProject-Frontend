@@ -153,60 +153,123 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.login-box {
-  background-color: white;
-  margin: 30vh auto;
-  padding: 20px;
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 20px;
-  box-shadow: 0 0 40px 0 rgba(77, 77, 77, 0.452);
+@media only screen and (min-width: 768px) {
+  /* for desktop */
+  .login-box {
+    background-color: white;
+    margin: 30vh auto 0;
+    padding: 20px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0 0 40px 0 rgba(77, 77, 77, 0.452);
+  }
+
+  .box-content {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .youthol-logo {
+    margin: 0 0 30px;
+    width: 30%;
+    height: auto;
+  }
+
+  .form-item {
+    display: flex;
+    align-items: center;
+    width: 70%;
+  }
+  .input-box {
+    height: 35px;
+    width: 100%;
+  }
+
+  .login-btn {
+    width: 100px;
+    height: 40px;
+    margin: 20px 0 10px;
+    padding: 20px 5px;
+    font-size: 22px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 0 !important; */
+  }
 }
 
-.box-content {
-  width: 100%;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+@media only screen and (max-width: 768px) {
+  /* for phone */
+  .login-box {
+    background-color: white;
+    margin: 30vh auto 0;
+    /* padding: 20px; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    /* box-shadow: 0 0 40px 0 rgba(77, 77, 77, 0.452); */
+  }
 
-.form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .box-content {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.youthol-logo {
-  margin: 0 0 30px;
-  width: 30%;
-  height: auto;
-}
+  .form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.form-item {
-  display: flex;
-  align-items: center;
-  width: 70%;
-}
-.input-box {
-  height: 35px;
-  width: 100%;
-}
+  .youthol-logo {
+    margin: 0 0 30px;
+    width: 150px;
+    height: auto;
+  }
 
-.login-btn {
-  width: 100px;
-  height: 40px;
-  margin: 20px 0 10px;
-  padding: 20px 5px;
-  font-size: 22px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* margin-left: 0 !important; */
+  .form-item {
+    display: flex;
+    align-items: center;
+    width: 70%;
+  }
+  .input-box {
+    height: 35px;
+    width: 100%;
+  }
+
+  .login-btn {
+    width: 100px;
+    height: 40px;
+    margin: 20px 0 10px;
+    padding: 20px 5px;
+    font-size: 22px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 0 !important; */
+  }
 }
 </style>

@@ -1,27 +1,21 @@
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { http } from 'assets/js/http'
 
 defineProps({
   title: {
     default: ''
-  },
-  seriesData: {},
-  _width: {
-    default: '70%'
-  },
-  _height: {
-    default: '620px'
   }
 })
 
+let _width = ref('70%')
+let _height = ref('620px')
 let tableData = reactive([])
 const filterHandler = (value, row, column) => {
   const property = column['property']
   return row[property] === value
 }
-
-onMounted(() => {
+function getTodayDuty() {
   http
     .post('/getTodayDuty/')
     .then((res) => {
@@ -43,6 +37,15 @@ onMounted(() => {
     .catch(function (error) {
       console.log(error)
     })
+}
+onMounted(() => {
+  let width = window.innerWidth
+  // let height = window.innerHeight
+  if (width < 768) {
+    _width.value = '95%'
+    _height.value = '400px'
+  }
+  getTodayDuty()
 })
 </script>
 <template>
