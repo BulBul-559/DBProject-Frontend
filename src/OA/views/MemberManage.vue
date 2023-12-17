@@ -4,13 +4,15 @@ import { http } from 'assets/js/http'
 import { ref, reactive, onMounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 import modifyMemberInfo from '../components/modifyMemberInfo.vue'
+import addNewYoutholer from '../components/addNewYoutholer.vue'
 
 // let userStore = useUserStore()
 
-let tableData = reactive([])
-let drawer = ref(false)
-let loading = ref(true)
 let tableRef = ref()
+let tableData = reactive([])
+let modifyDrawer = ref(false)
+let addMemberDrawer = ref(false)
+let loading = ref(true)
 let editInfo = reactive({
   sdut_id: 0,
   name: '',
@@ -127,13 +129,18 @@ const editMember = (index, row) => {
 }
 
 function displayMemberEdit(res) {
-  console.log(res)
-  drawer.value = res
+  modifyDrawer.value = res
 }
 
-function addOneYouthol() {}
+function displayMemberAdd(res) {
+  addMemberDrawer.value = res
+}
 
-function addManyYouthol() {}
+function addOneYouthol() {
+  displayMemberAdd(true)
+}
+
+// function addManyYouthol() {}
 
 // const labelPosition = ref < FormProps['labelPosition'] > 'right'
 
@@ -145,7 +152,7 @@ onMounted(() => {
   <div class="main-layout">
     <div class="options">
       <div class="add-btn" @click="addOneYouthol">新增成员</div>
-      <div class="add-btn" @click="addManyYouthol">批量导入</div>
+      <!-- <div class="add-btn" @click="addManyYouthol">批量导入</div> -->
     </div>
 
     <el-table
@@ -203,7 +210,7 @@ onMounted(() => {
       />
       <el-table-column align="center" prop="option" label="操作">
         <template #default="scope">
-          <el-button @click="editMember(scope.$index, scope.row)">Edit</el-button>
+          <el-button @click="editMember(scope.$index, scope.row)">编辑</el-button>
           <!-- <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button> -->
         </template>
       </el-table-column>
@@ -212,9 +219,16 @@ onMounted(() => {
     <modifyMemberInfo
       @displayMemberEdit="displayMemberEdit"
       @getInfo="getAllYoutholer"
-      :drawer="drawer"
+      :drawer="modifyDrawer"
       :info="editInfo"
     ></modifyMemberInfo>
+
+    <addNewYoutholer
+      @display-member-add="displayMemberAdd"
+      @getInfo="getAllYoutholer"
+      :drawer="addMemberDrawer"
+    >
+    </addNewYoutholer>
   </div>
 </template>
 

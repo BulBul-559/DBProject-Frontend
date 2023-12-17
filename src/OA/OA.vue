@@ -3,7 +3,7 @@ import { reactive, onMounted } from 'vue'
 import { RouterView, RouterLink } from 'vue-router'
 import { http } from 'assets/js/http.js' //配置了基本的设置
 import { useUserStore } from 'store/store.js'
-import { errorAlert, successAlert } from 'assets/js/message.js'
+import { errorAlert } from 'assets/js/message.js'
 
 // basic user infomation
 // let userInfo = reactive({

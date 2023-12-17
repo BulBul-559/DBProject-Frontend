@@ -2,7 +2,7 @@
 import { onMounted, reactive } from 'vue'
 import { http } from 'assets/js/http'
 
-let propData = defineProps({
+defineProps({
   title: {
     default: ''
   },

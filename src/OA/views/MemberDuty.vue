@@ -2,9 +2,12 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 
-import ShowDataBasicBar from '../components/ShowDataBasicBar.vue'
-import ShowDataBasicPie from '../components/ShowDataBasicPie.vue'
-import MemberList from '../components/MemberList.vue'
+// import ShowDataBasicBar from '../components/ShowDataBasicBar.vue'
+// import ShowDataBasicPie from '../components/ShowDataBasicPie.vue'
+// import MemberList from '../components/MemberList.vue'
+import exhibitDutyInfo from '../components/exhibitDutyInfo.vue'
+import applyDutyLeave from '../components/applyDutyLeave.vue'
+
 import { http } from 'assets/js/http'
 import { useUserStore } from 'store/store'
 
@@ -13,8 +16,8 @@ import { useUserStore } from 'store/store'
 //   longtitude: 0
 // })
 let is_duty = ref(false)
-let look_data = ref('排名')
 let userStore = useUserStore()
+let applyDutyDrawer = ref(false)
 
 let nowDuty = reactive({
   start_time: '',
@@ -225,6 +228,16 @@ function checkDuty() {
       errorAlert('检查签到状态失败')
     })
 }
+
+function displayApplyDuty(res) {
+  applyDutyDrawer.value = res
+}
+
+function applyLeave() {
+  // applyDutyDrawer.value = true
+  displayApplyDuty(true)
+}
+
 onMounted(() => {
   checkDuty()
 })
@@ -247,21 +260,14 @@ onUnmounted(() => {
         <div class="now-duty-state">{{ nowDuty.duty_state }}</div>
       </div>
       <div class="my-duty">
-        <div class="record-btn my-duty-btn">签到记录</div>
-        <div class="leave-btn my-duty-btn">值班请假</div>
+        <div class="record-btn my-duty-btn">值班记录</div>
+        <div class="leave-btn my-duty-btn" @click="applyLeave">值班请假</div>
       </div>
     </div>
     <el-divider />
-    <div class="exhibit-info">
-      <el-radio-group v-model="look_data" size="large">
-        <el-radio-button label="排名" />
-        <el-radio-button label="部门" />
-        <el-radio-button label="列表" />
-      </el-radio-group>
-      <ShowDataBasicBar v-if="look_data == '排名'" :title="''"></ShowDataBasicBar>
-      <ShowDataBasicPie v-if="look_data == '部门'" :title="''"></ShowDataBasicPie>
-      <MemberList v-if="look_data == '列表'" :title="''"></MemberList>
-    </div>
+    <!-- <router-view name="Exhibition"></router-view> -->
+    <exhibitDutyInfo> </exhibitDutyInfo>
+    <applyDutyLeave :drawer="applyDutyDrawer" @displayApplyDuty="displayApplyDuty"></applyDutyLeave>
   </div>
 </template>
 
@@ -374,16 +380,6 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: start;
   align-items: center;
-}
-
-.exhibit-info {
-  width: 100%;
-  font-size: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-color: #9dffa0; */
 }
 .duty_divider {
   margin: 10px;
