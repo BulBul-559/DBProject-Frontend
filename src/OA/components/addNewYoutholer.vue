@@ -2,7 +2,7 @@
 import { http } from 'assets/js/http'
 import { less768 } from 'assets/js/screen'
 import { ref, reactive, onMounted } from 'vue'
-import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
+import { errorAlert, successAlert } from 'assets/js/message.js'
 
 defineProps(['drawer'])
 const emit = defineEmits(['displayMemberAdd', 'getInfo'])
@@ -13,7 +13,8 @@ const departmentOption = [
   { label: '综合部', value: '综合部' },
   { label: '闪客部', value: '闪客部' },
   { label: '视频推广部', value: '视频推广部' },
-  { label: '摄影部', value: '摄影部' }
+  { label: '摄影部', value: '摄影部' },
+  { label: '管理组', value: '管理组' }
 ]
 
 const identityOption = [
@@ -40,12 +41,6 @@ const dutyFrame = [
   { label: '4：78节', value: '4' },
   { label: '5：910节', value: '5' }
 ]
-const verifyContent = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请输入学号'))
-  }
-  callback()
-}
 
 const ruleFormRef = ref()
 const rules = reactive({
@@ -155,7 +150,7 @@ const addOneYoutholer = async (formEl) => {
 }
 
 let handleClose = (done) => {
-  emit('displayMemberEdit', false)
+  emit('displayMemberAdd', false)
   done()
 }
 

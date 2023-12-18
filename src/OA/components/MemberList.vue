@@ -69,7 +69,8 @@ onMounted(() => {
           { text: '综合部', value: '综合部' },
           { text: '闪客部', value: '闪客部' },
           { text: '视频推广部', value: '视频推广部' },
-          { text: '摄影部', value: '摄影部' }
+          { text: '摄影部', value: '摄影部' },
+          { text: '管理组', value: '管理组' }
         ]"
         :filter-method="filterHandler"
         sortable

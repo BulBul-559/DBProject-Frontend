@@ -15,7 +15,8 @@ const departmentOption = [
   { label: '综合部', value: '综合部' },
   { label: '闪客部', value: '闪客部' },
   { label: '视频推广部', value: '视频推广部' },
-  { label: '摄影部', value: '摄影部' }
+  { label: '摄影部', value: '摄影部' },
+  { label: '管理组', value: '管理组' }
 ]
 
 const identityOption = [
