@@ -1,6 +1,7 @@
 <script setup>
 import { http } from 'assets/js/http'
-import { reactive } from 'vue'
+import { less768 } from 'assets/js/screen'
+import { reactive, onMounted, ref } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 
 const propData = defineProps(['drawer', 'info'])
@@ -54,7 +55,7 @@ function modifyMemberInfo() {
   }
 
   http
-    .post('/modifySingleYoutholInfo/', {
+    .post('/ModifySingleYoutholInfo/', {
       sdut_id: memberInfo.sdut_id,
       department: memberInfo.department,
       name: memberInfo.name,
@@ -81,7 +82,7 @@ let handleClose = (done) => {
 const handleDelete = () => {
   const success = () => {
     http
-      .post('/deletYoutholer/', {
+      .post('/DeletYoutholer/', {
         sdut_id: memberInfo.sdut_id,
         department: memberInfo.department
       })
@@ -107,9 +108,22 @@ const handleDelete = () => {
 
   messageBox(text, title, confirmText, cancelText, success, error)
 }
+
+let _size = ref('40%')
+onMounted(() => {
+  if (less768()) {
+    _size.value = '90%'
+  }
+})
 </script>
 <template>
-  <el-drawer :modelValue="drawer" title="编辑成员信息" direction="rtl" :before-close="handleClose">
+  <el-drawer
+    :size="_size"
+    :modelValue="drawer"
+    title="编辑成员信息"
+    direction="rtl"
+    :before-close="handleClose"
+  >
     <template #default>
       <el-form
         label-position="top"

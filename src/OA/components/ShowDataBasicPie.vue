@@ -53,7 +53,7 @@ let showData = ref()
 
 function getTodayDuty() {
   http
-    .post('/getTodayDuty/')
+    .post('/GetTodayDuty/')
     .then((res) => {
       let data = res.data
       let tempData = []

@@ -15,7 +15,7 @@ import { useUserStore } from 'store/store'
 
 // let location = reactive({
 //   latitude: 0,
-//   longtitude: 0
+//   longitude: 0
 // })
 let is_duty = ref(false)
 let userStore = useUserStore()
@@ -78,7 +78,7 @@ function startDuty() {
         .post('/StartDuty/', {
           sdut_id: userStore.sdut_id,
           latitude: location.lat,
-          longtitude: location.longt
+          longitude: location.longt
         })
         .then((res) => {
           waiting_duty = false
@@ -141,7 +141,7 @@ function toSignOutState(lat, longt) {
     .post('/FinishDuty/', {
       sdut_id: userStore.sdut_id,
       latitude: lat,
-      longtitude: longt
+      longitude: longt
     })
     .then((res) => {
       let data = res.data
@@ -460,7 +460,7 @@ onUnmounted(() => {
 @media only screen and (max-width: 768px) {
   /* for phone */
   .start-duty {
-    height: 400px;
+    height: 320px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -480,9 +480,9 @@ onUnmounted(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    height: 150px;
-    font-size: 40px;
+    width: 120px;
+    height: 120px;
+    font-size: 35px;
     color: #008aff;
     border-radius: 4000px;
     border: 3px solid #008aff;
@@ -507,12 +507,11 @@ onUnmounted(() => {
   }
 
   .now-duty-time {
-    font-size: 20px;
+    font-size: 18px;
   }
   .now-duty-state {
     border-radius: 25px;
-    font-size: 35px;
-    padding: 20px 20px;
+    font-size: 30px;
     color: #008aff;
   }
 
@@ -525,9 +524,9 @@ onUnmounted(() => {
   }
 
   .my-duty-btn {
-    font-size: 25px;
+    font-size: 20px;
     padding: 15px;
-    margin: 10px;
+    margin: 0 10px;
     transition:
       box-shadow 0.25s,
       transform 0.5s;

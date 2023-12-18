@@ -1,6 +1,7 @@
 <script setup>
 import { http } from 'assets/js/http'
-import { ref, reactive } from 'vue'
+import { less768 } from 'assets/js/screen'
+import { ref, reactive, onMounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 
 defineProps(['drawer'])
@@ -101,7 +102,7 @@ const memberInfo = reactive({
 
 function postAddOneYoutholer() {
   http
-    .post('/addOneYoutholer/', {
+    .post('/AddOneYoutholer/', {
       sdut_id: memberInfo.sdut_id,
       name: memberInfo.name,
       college: memberInfo.college,
@@ -157,9 +158,22 @@ let handleClose = (done) => {
   emit('displayMemberEdit', false)
   done()
 }
+
+let _size = ref('40%')
+onMounted(() => {
+  if (less768()) {
+    _size.value = '90%'
+  }
+})
 </script>
 <template>
-  <el-drawer :modelValue="drawer" title="编辑成员信息" direction="rtl" :before-close="handleClose">
+  <el-drawer
+    :size="_size"
+    :modelValue="drawer"
+    title="编辑成员信息"
+    direction="rtl"
+    :before-close="handleClose"
+  >
     <template #default>
       <el-form
         ref="ruleFormRef"

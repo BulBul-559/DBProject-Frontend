@@ -266,4 +266,9 @@ onMounted(() => {
   color: white;
   background-color: #008aff;
 }
+@media only screen and (max-width: 768px) {
+  .table {
+    width: 90%;
+  }
+}
 </style>

@@ -11,7 +11,7 @@ onMounted(() => {
   let width = window.innerWidth
   let font_size = 140
   if (width < 768) {
-    font_size = 100
+    font_size = 80
   }
   option = {
     graphic: {
@@ -70,11 +70,23 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.title {
-  width: 650px;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@media only screen and (min-width: 768px) {
+  .title {
+    width: 650px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .title {
+    width: 350px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>

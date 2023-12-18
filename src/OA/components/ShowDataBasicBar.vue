@@ -42,7 +42,7 @@ function initChart(xData, seriesData) {
 
 function getTodatDuty() {
   http
-    .post('/getTodayDuty/')
+    .post('/GetTodayDuty/')
     .then((res) => {
       let xData
       let seriesData

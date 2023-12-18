@@ -1,9 +1,12 @@
 <script setup>
-import { reactive, onMounted } from 'vue'
-import { RouterView, RouterLink } from 'vue-router'
+import { reactive, onMounted, ref } from 'vue'
+import { RouterView } from 'vue-router'
 import { http } from 'assets/js/http.js' //配置了基本的设置
+import { less768 } from 'assets/js/screen.js' //配置了基本的设置
 import { useUserStore } from 'store/store.js'
 import { errorAlert } from 'assets/js/message.js'
+
+import navList from './components/navList.vue'
 
 // basic user infomation
 // let userInfo = reactive({
@@ -24,15 +27,7 @@ let userStore = useUserStore()
 // verify the token is vaild or not
 function verifySignIn() {
   http
-    .post(
-      '/getYoutholerInfo/',
-      {},
-      {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('YoutholAccessToken')
-        }
-      }
-    )
+    .post('/GetYoutholerInfo/', {})
     .then((res) => {
       // 在这里设置 Pinia状态？
       userStore.$patch({
@@ -51,12 +46,6 @@ function verifySignIn() {
       userStore.$patch({ sdut_id: 'no id', is_login: false })
       return false
     })
-}
-
-function Logout() {
-  localStorage.removeItem('YoutholAccessToken')
-  userStore.$patch({ sdut_id: '', is_login: false })
-  window.location.href = '/youthol/'
 }
 
 function checkDuty() {
@@ -81,7 +70,20 @@ function checkDuty() {
     })
 }
 
+let handleClose = (done) => {
+  done()
+}
+
+let drawer = ref(false)
+function displayHeaderNav(res) {
+  drawer.value = res
+}
+
+let _size = ref('0%')
 onMounted(() => {
+  if (less768()) {
+    _size.value = '90%'
+  }
   if (userStore.is_login == true) {
     //先检查 pinia
     checkDuty()
@@ -98,6 +100,30 @@ onMounted(() => {
 <template>
   <div class="main-layout">
     <el-container>
+      <el-header class="header-nav">
+        <img
+          src="../assets/img/youthol.png"
+          alt=""
+          class="youthol-logo"
+          @click="displayHeaderNav(true)"
+        />
+
+        <el-drawer
+          :size="_size"
+          v-model="drawer"
+          :with-header="false"
+          direction="ttb"
+          :before-close="handleClose"
+        >
+          <template #default>
+            <div class="header-nav-drawer">
+              <div class="nav-item" @click="displayHeaderNav(false)">关闭菜单</div>
+              <navList @display-header-nav="displayHeaderNav"> </navList>
+            </div>
+          </template>
+        </el-drawer>
+      </el-header>
+
       <el-container>
         <el-aside class="aside-nav">
           <div class="user-info">
@@ -107,45 +133,10 @@ onMounted(() => {
               <div class="department">{{ userStore.department }}</div>
             </div>
           </div>
-          <el-scrollbar>
-            <!-- <router-link to="/">
-              <div class="home nav-item">首页</div>
-            </router-link> -->
+          <navList> </navList>
 
-            <router-link to="/duty">
-              <div class="duty nav-item">值班</div>
-            </router-link>
-
-            <router-link to="/borrow">
-              <div class="borrow nav-item">设备</div>
-            </router-link>
-
-            <router-link to="/study">
-              <div class="study nav-item">培训</div>
-            </router-link>
-
-            <router-link to="/room">
-              <div class="room nav-item">场地</div>
-            </router-link>
-
-            <router-link to="/test">
-              <div class="test nav-item">测试</div>
-            </router-link>
-
-            <router-link to="/DutyRecord" v-if="userStore.identity == '管理员'">
-              <div class="DutyRecord nav-item">签到记录</div>
-            </router-link>
-            <router-link to="/MemberManage" v-if="userStore.identity == '管理员'">
-              <div class="MemberManage nav-item">成员管理</div>
-            </router-link>
-            <router-link to="/MachineManage" v-if="userStore.identity == '管理员'">
-              <div class="MachineManage nav-item">设备管理</div>
-            </router-link>
-            <div class="logout nav-item" @click="Logout">退出</div>
-          </el-scrollbar>
           <!-- <img src="../assets/img/youthol.png" alt="" class="youthol-logo" /> -->
         </el-aside>
-
         <el-main>
           <el-scrollbar>
             <router-view name="MainComponment"></router-view>
@@ -153,11 +144,11 @@ onMounted(() => {
         </el-main>
       </el-container>
 
-      <el-footer class="state-bar">
+      <!-- <el-footer class="state-bar">
         <div class="all-duty">累计值班：{{ stateBar.allDuty }}小时</div>
         <div class="duty-state">{{ userStore.duty_state }}</div>
         <div class="now-brorrow">正在借用设备：{{ stateBar.nowBrorrow }}</div>
-      </el-footer>
+      </el-footer> -->
     </el-container>
   </div>
 </template>
@@ -165,6 +156,9 @@ onMounted(() => {
 <style scoped>
 @media only screen and (min-width: 768px) {
   /* for desktop */
+  .youthol-logo {
+    display: none;
+  }
   .user-info {
     display: flex;
     flex-direction: column;
@@ -189,6 +183,9 @@ onMounted(() => {
 
   .el-scrollbar {
     width: 100%;
+  }
+  .header-nav {
+    height: 0px;
   }
   .aside-nav {
     height: 100%;
@@ -247,6 +244,11 @@ onMounted(() => {
 
 @media only screen and (max-width: 768px) {
   /* for phone */
+  .header-nav-drawer {
+    width: 100%;
+    height: 100%;
+    /* background-color: #008aff; */
+  }
   .user-info {
     display: flex;
     flex-direction: column;
@@ -273,6 +275,28 @@ onMounted(() => {
   .el-scrollbar {
     width: 100%;
   }
+
+  .el-main {
+    padding: 50px 10px 10px;
+  }
+
+  .youthol-logo {
+    height: 40px;
+    /* width: 105px; */
+    width: auto;
+  }
+  .header-nav {
+    height: 50px;
+    width: 100%;
+    z-index: 1000;
+    /* background-color: #008aff; */
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+  }
   .aside-nav {
     height: 100%;
     width: 0px;
@@ -288,7 +312,9 @@ onMounted(() => {
     margin: 3px 0;
     width: 100%;
     padding: 20px 0px;
-    color: white;
+    color: #f68512;
+    font-weight: 800;
+    font-size: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -300,7 +326,7 @@ onMounted(() => {
 
   .nav-item:hover {
     opacity: 1;
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 0 20px #57b1ff6f;
     transform: scale(1.05, 1.05);
   }
 

@@ -77,7 +77,7 @@ let _size = ref('50%')
 
 function postLeaveApply() {
   http
-    .post('/applyDutyLeave/', {
+    .post('/ApplyDutyLeave/', {
       leave: leaveInfo.date
     })
     .then((res) => {
@@ -121,7 +121,7 @@ function toStringDate(date) {
 
 function getDutyInfo() {
   http
-    .post('/getSingleDutyTime/', {})
+    .post('/GetSingleDutyTime/', {})
     .then((res) => {
       console.log(res)
       let data = res.data
@@ -221,7 +221,7 @@ function getDutyInfo() {
 
 function getLeaveRecord() {
   http
-    .post('/getSingleLeaveRecord/', {})
+    .post('/GetSingleLeaveRecord/', {})
     .then((res) => {
       let data = res.data
       console.log(data)

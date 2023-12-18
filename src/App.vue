@@ -19,7 +19,7 @@ let store = useUserStore()
 function verifySignIn() {
   http
     .post(
-      '/getUserInfo/',
+      '/GetUserInfo/',
       {},
       {
         headers: {
@@ -66,45 +66,81 @@ onMounted(() => {
 </template>
 
 <style scoped>
+@media only screen and (min-width: 768px) {
+  .sign-btn {
+    margin: 30px;
+    padding: 15px 25px;
+    font-size: 30px;
+    border: 2px solid white;
+    border-radius: 15px;
+  }
 
+  .sign-btn:hover {
+    background-color: white;
+    color: #008aff;
+    border: 2px solid 008aff;
+  }
+  .divider {
+    margin: 10px;
+    width: 80%;
+    border: 1px solid white;
+  }
+  .main-layout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-.sign-btn {
-  margin: 30px;
-  padding: 15px 25px;
-  font-size: 30px;
-  border: 2px solid white;
-  border-radius: 15px;
-}
+  .choice-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.sign-btn:hover {
-  background-color: white;
-  color: #008aff;
-  border: 2px solid 008aff;
-}
-.divider {
-  margin: 10px;
-  width: 80%;
-  border: 1px solid white;
-}
-.main-layout {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.choice-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .choice {
+    margin: 10px;
+    font-size: 25px;
+  }
 }
 
-.choice {
-  margin: 10px;
-  font-size: 25px;
-}
-.hello-title {
-  font-size: 150px;
+@media only screen and (max-width: 768px) {
+  .sign-btn {
+    margin: 30px;
+    padding: 10px 18px;
+    font-size: 25px;
+    border: 2px solid white;
+    border-radius: 15px;
+  }
+
+  .sign-btn:hover {
+    background-color: white;
+    color: #008aff;
+    border: 2px solid 008aff;
+  }
+  .divider {
+    margin: 10px;
+    width: 80%;
+    border: 1px solid white;
+  }
+  .main-layout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .choice-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .choice {
+    margin: 8px;
+    font-size: 20px;
+  }
 }
 </style>

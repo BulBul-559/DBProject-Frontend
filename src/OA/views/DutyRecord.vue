@@ -1,5 +1,6 @@
 <script setup>
 import { http } from 'assets/js/http'
+import { less768 } from 'assets/js/screen'
 import { useUserStore } from 'store/store'
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
@@ -63,8 +64,15 @@ function getDutyInfo() {
       errorAlert('获取值班信息失败')
     })
 }
+
+let _date_picker_size = ref('large')
+let _table_size = ref('large')
 onMounted(() => {
   // getAllYoutholer()
+  if (less768()) {
+    _date_picker_size.value = 'small'
+    _table_size.value = 'small'
+  }
 })
 
 const shortcuts = [
@@ -117,11 +125,11 @@ const shortcuts = [
           v-model="dateRange"
           type="daterange"
           unlink-panels
-          range-separator="To"
-          start-placeholder="Start date"
-          end-placeholder="End date"
+          range-separator="到"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
           value-format="YYYY-MM-DD"
-          size="large"
+          :size="_date_picker_size"
           :shortcuts="shortcuts"
         />
         <!-- </div> -->
@@ -136,7 +144,7 @@ const shortcuts = [
       key="unique_id"
       :data="tableData"
       v-loading="loading"
-      size="large"
+      :size="_table_size"
     >
       <el-table-column prop="name" label="姓名" sortable />
       <el-table-column prop="sdut_id" label="学号" sortable />
@@ -175,37 +183,78 @@ const shortcuts = [
 </template>
 
 <style scoped>
-.main-layout {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.table {
-  width: 80%;
-}
-.options {
-  width: 100%;
-  display: flex;
-  /* flex-direction: column; */
-  justify-content: center;
-  align-items: center;
+@media only screen and (min-width: 768px) {
+  .main-layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .table {
+    width: 80%;
+  }
+  .options {
+    width: 100%;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    font-size: 20px;
+    margin: 8px 20px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #008aff;
+    background-color: white;
+    border: 3px #008aff solid;
+  }
+
+  .btn:hover {
+    color: white;
+    background-color: #008aff;
+  }
 }
 
-.btn {
-  font-size: 20px;
-  margin: 8px 20px;
-  padding: 8px 20px;
-  border-radius: 10px;
-  font-weight: 700;
-  color: #008aff;
-  background-color: white;
-  border: 3px #008aff solid;
-}
+@media only screen and (max-width: 768px) {
+  .date-picker {
+    margin: 20px 0;
+  }
+  .main-layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .table {
+    width: 98%;
+  }
+  .options {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-.btn:hover {
-  color: white;
-  background-color: #008aff;
+  .btn {
+    font-size: 20px;
+    margin: 8px 20px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #008aff;
+    background-color: white;
+    border: 3px #008aff solid;
+  }
+
+  .btn:hover {
+    color: white;
+    background-color: #008aff;
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue'
 import { http } from 'assets/js/http'
+import { less768 } from 'assets/js/screen'
 
 defineProps({
   title: {
@@ -17,7 +18,7 @@ const filterHandler = (value, row, column) => {
 }
 function getTodayDuty() {
   http
-    .post('/getTodayDuty/')
+    .post('/GetTodayDuty/')
     .then((res) => {
       let data = res.data
       for (let i = 0; i < data.length; i++) {
@@ -39,9 +40,9 @@ function getTodayDuty() {
     })
 }
 onMounted(() => {
-  let width = window.innerWidth
+  // let width = window.innerWidth
   // let height = window.innerHeight
-  if (width < 768) {
+  if (less768()) {
     _width.value = '95%'
     _height.value = '400px'
   }

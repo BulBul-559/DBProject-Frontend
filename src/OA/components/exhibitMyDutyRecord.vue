@@ -45,7 +45,7 @@ function toStringDate(date) {
 
 function getMyDutyRecord() {
   http
-    .post('/getSingleDutyRecord/', {})
+    .post('/GetSingleDutyRecord/', {})
     .then((res) => {
       let data = res.data
       console.log(data)
