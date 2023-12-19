@@ -1,7 +1,6 @@
 <script setup>
 import { http } from 'assets/js/http'
 import { ref, reactive, onMounted } from 'vue'
-import { errorAlert, successAlert } from 'assets/js/message.js'
 
 defineProps(['drawer'])
 const emit = defineEmits(['displayRecord'])
@@ -17,12 +16,6 @@ const formatterTotalTime = (data) => {
 
   return res
 }
-const formatterEndTime = (data) => {
-  let res = data.end_date
-  // let res = data.leave_date.split(' ')[0]
-
-  return res
-}
 
 let tableData = reactive([])
 let _size = ref('50%')
@@ -30,17 +23,6 @@ let _size = ref('50%')
 let handleClose = (done) => {
   emit('displayRecord', false)
   done()
-}
-
-function toStringDate(date) {
-  let year = date.getFullYear()
-  let month = (date.getMonth() + 1).toString().padStart(2, '0')
-  let day = date.getDate().toString().padStart(2, '0')
-
-  // 将年、月、日拼接成 YYYYMMDD 格式
-  let yyMMdd = `${year}-${month}-${day}`
-
-  return yyMMdd
 }
 
 function getMyDutyRecord() {

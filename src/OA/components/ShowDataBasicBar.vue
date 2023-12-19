@@ -100,6 +100,7 @@ onMounted(() => {
   // let height = window.innerHeight
   if (width < 768) {
     _height.value = '400px'
+    _width.value = '90%'
   }
   getTodatDuty()
 })

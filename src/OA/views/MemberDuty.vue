@@ -3,9 +3,6 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
 import { ElMessage } from 'element-plus'
 
-// import ShowDataBasicBar from '../components/ShowDataBasicBar.vue'
-// import ShowDataBasicPie from '../components/ShowDataBasicPie.vue'
-// import MemberList from '../components/MemberList.vue'
 import exhibitDutyInfo from '../components/exhibitDutyInfo.vue'
 import applyDutyLeave from '../components/applyDutyLeave.vue'
 import exhibitMyDutyRecord from '../components/exhibitMyDutyRecord.vue'
@@ -13,10 +10,6 @@ import exhibitMyDutyRecord from '../components/exhibitMyDutyRecord.vue'
 import { http } from 'assets/js/http'
 import { useUserStore } from 'store/store'
 
-// let location = reactive({
-//   latitude: 0,
-//   longitude: 0
-// })
 let is_duty = ref(false)
 let userStore = useUserStore()
 let applyDutyDrawer = ref(false)
@@ -316,7 +309,7 @@ onUnmounted(() => {
       <div class="now-duty">
         <div class="now-duty-time">{{ is_duty ? nowDuty.pass_time : '未值班' }}</div>
         <el-divider class="duty_divider" />
-        <div class="now-duty-state">{{ nowDuty.duty_state }}</div>
+        <div class="now-duty-state">{{ is_duty ? '值班中' : '不在值班时间内' }}</div>
       </div>
       <div class="my-duty">
         <div class="record-btn my-duty-btn" @click="showMyRecord">值班记录</div>

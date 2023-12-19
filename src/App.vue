@@ -7,7 +7,6 @@ import { http } from './assets/js/http.js' //配置了基本的设置
 
 function toLogin() {
   window.location.href = '/youthol/login/'
-  // userStore.add()
 }
 
 function toOA() {
@@ -44,6 +43,10 @@ function logout() {
   store.$patch({ sdut_id: '', is_login: false })
 }
 
+function openPage(res) {
+  window.location.href = res
+}
+
 onMounted(() => {
   verifySignIn()
 })
@@ -55,8 +58,27 @@ onMounted(() => {
     <div class="divider"></div>
     <div class="choice-list animate__animated animate__backInUp">
       <div v-if="store.is_login" class="choice" @click="toOA">OA系统</div>
-      <div class="choice">我要投稿</div>
-      <div class="choice">关于我们</div>
+      <!-- <div class="choice">我要投稿</div> -->
+      <!-- <a href=""></a> -->
+      <div
+        class="choice"
+        @click="
+          openPage(
+            'http://youthlab-sdut-edu-cn-s.newvpn.sdut.edu.cn:8118/app/wechat-service/home/#/'
+          )
+        "
+      >
+        学生服务
+      </div>
+      <div
+        class="choice"
+        @click="openPage('http://youthlab-sdut-edu-cn-s.newvpn.sdut.edu.cn:8118/spa/fdy/#/')"
+      >
+        辅导员风采
+      </div>
+      <div class="choice" @click="openPage('https://youth.sdut.edu.cn/6995/list.htm')">
+        关于我们
+      </div>
     </div>
     <div class="sign-box animate__animated animate__backInUp">
       <div v-if="store.is_login" class="sign-btn" @click="logout">退出</div>
@@ -100,6 +122,7 @@ onMounted(() => {
   }
 
   .choice {
+    color: white;
     margin: 10px;
     font-size: 25px;
   }
@@ -140,7 +163,7 @@ onMounted(() => {
 
   .choice {
     margin: 8px;
-    font-size: 20px;
+    font-size: 16px;
   }
 }
 </style>

@@ -22,7 +22,7 @@ function close() {
     <router-link to="/duty">
       <div class="duty nav-item" @click="close">值班</div>
     </router-link>
-
+    <!-- 
     <router-link to="/borrow">
       <div class="borrow nav-item" @click="close">设备</div>
     </router-link>
@@ -37,7 +37,7 @@ function close() {
 
     <router-link to="/test">
       <div class="test nav-item" @click="close">测试</div>
-    </router-link>
+    </router-link> -->
 
     <router-link to="/DutyRecord" v-if="userStore.identity == '管理员'">
       <div class="DutyRecord nav-item" @click="close">签到记录</div>
@@ -45,9 +45,9 @@ function close() {
     <router-link to="/MemberManage" v-if="userStore.identity == '管理员'">
       <div class="MemberManage nav-item" @click="close">成员管理</div>
     </router-link>
-    <router-link to="/MachineManage" v-if="userStore.identity == '管理员'">
+    <!-- <router-link to="/MachineManage" v-if="userStore.identity == '管理员'">
       <div class="MachineManage nav-item" @click="close">设备管理</div>
-    </router-link>
+    </router-link> -->
     <div class="logout nav-item" @click="Logout">退出登录</div>
   </el-scrollbar>
 </template>

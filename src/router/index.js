@@ -6,42 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'default'
-      // components: {
-      //   MemberDuty:MemberDutyVue
-      // }
     }
-    // {
-    //   path: '/OA',
-    //   name: 'oa-home',
-    //   components: {
-    //     MemberDuty:MemberDutyVue}
-    // },
-    // {
-    //   path: '/OA/duty/',
-    //   name: 'oa-duty',
-    //   component: MemberDutyVue
-    //   // path: '/about',
-    //   // name: 'about',
-    //   // // route level code-splitting
-    //   // // this generates a separate chunk (About.[hash].js) for this route
-    //   // // which is lazy-loaded when the route is visited.
-    //   // component: () => import('../views/AboutView.vue')
-    // },
-    // {
-    //   path: '/OA/borrow/',
-    //   name: 'oa-borrow',
-    //   component: MemberDutyVue
-    // },
-    // {
-    //   path: '/OA/study/',
-    //   name: 'oa-home',
-    //   component: MemberDutyVue
-    // },
-    // {
-    //   path: '/OA/room/',
-    //   name: 'oa-room',
-    //   component: MemberDutyVue
-    // }
   ]
 })
 

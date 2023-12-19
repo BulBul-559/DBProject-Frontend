@@ -1,11 +1,8 @@
 <script setup>
 import { http } from 'assets/js/http'
 import { less768 } from 'assets/js/screen'
-import { useUserStore } from 'store/store'
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
-import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
-// import { fa } from 'element-plus/es/locale'
-let userStore = useUserStore()
+import { ref, reactive, onMounted } from 'vue'
+import { errorAlert, successAlert } from 'assets/js/message.js'
 
 const tableRef = ref()
 

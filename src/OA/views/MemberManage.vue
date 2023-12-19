@@ -139,11 +139,6 @@ function displayMemberAdd(res) {
 function addOneYouthol() {
   displayMemberAdd(true)
 }
-
-// function addManyYouthol() {}
-
-// const labelPosition = ref < FormProps['labelPosition'] > 'right'
-
 onMounted(() => {
   getAllYoutholer()
 })

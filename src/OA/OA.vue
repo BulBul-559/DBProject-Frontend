@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { RouterView } from 'vue-router'
 import { http } from 'assets/js/http.js' //配置了基本的设置
 import { less768 } from 'assets/js/screen.js' //配置了基本的设置
@@ -7,20 +7,6 @@ import { useUserStore } from 'store/store.js'
 import { errorAlert } from 'assets/js/message.js'
 
 import navList from './components/navList.vue'
-
-// basic user infomation
-// let userInfo = reactive({
-//   profileSrc: '/src/assets/img/me.jpg',
-//   username: '孙美源',
-//   department: '程序部'
-// })
-
-// the bottom of the page, display some specific information
-let stateBar = reactive({
-  allDuty: '4.5',
-  dutyState: '未值班',
-  nowBrorrow: '1'
-})
 
 let userStore = useUserStore()
 
@@ -101,27 +87,15 @@ onMounted(() => {
   <div class="main-layout">
     <el-container>
       <el-header class="header-nav">
-        <img
-          src="../assets/img/youthol.png"
-          alt=""
-          class="youthol-logo"
-          @click="displayHeaderNav(true)"
-        />
-
-        <el-drawer
-          :size="_size"
-          v-model="drawer"
-          :with-header="false"
-          direction="ttb"
-          :before-close="handleClose"
-        >
-          <template #default>
-            <div class="header-nav-drawer">
-              <div class="nav-item" @click="displayHeaderNav(false)">关闭菜单</div>
-              <navList @display-header-nav="displayHeaderNav"> </navList>
-            </div>
-          </template>
-        </el-drawer>
+        <div class="top-nav">
+          <img
+            src="../assets/img/youthol.png"
+            alt=""
+            class="youthol-logo"
+            @click="displayHeaderNav(true)"
+          />
+          <div class="top-nav-btn" @click="displayHeaderNav(true)">菜单</div>
+        </div>
       </el-header>
 
       <el-container>
@@ -150,6 +124,20 @@ onMounted(() => {
         <div class="now-brorrow">正在借用设备：{{ stateBar.nowBrorrow }}</div>
       </el-footer> -->
     </el-container>
+    <el-drawer
+      :size="_size"
+      v-model="drawer"
+      :with-header="false"
+      direction="ttb"
+      :before-close="handleClose"
+    >
+      <template #default>
+        <div class="header-nav-drawer">
+          <div class="nav-item" @click="displayHeaderNav(false)">关闭菜单</div>
+          <navList @display-header-nav="displayHeaderNav"> </navList>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
@@ -244,6 +232,27 @@ onMounted(() => {
 
 @media only screen and (max-width: 768px) {
   /* for phone */
+  .top-nav {
+    padding: 0 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .top-nav-btn {
+    color: #f68512;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 3px solid #f68512;
+  }
+
+  .top-nav-btn:hover {
+    background-color: #f68512;
+    color: white;
+    border: 3px solid #f68512;
+  }
   .header-nav-drawer {
     width: 100%;
     height: 100%;
