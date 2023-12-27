@@ -3,6 +3,7 @@ import { http } from 'assets/js/http'
 import { less768 } from 'assets/js/screen'
 import { ref, reactive, onMounted } from 'vue'
 import { errorAlert, successAlert } from 'assets/js/message.js'
+import { departmentFilter, identityFilter } from 'assets/js/filter.js'
 
 const tableRef = ref()
 
@@ -148,15 +149,7 @@ const shortcuts = [
       <el-table-column
         prop="department"
         label="部门"
-        :filters="[
-          { text: '程序部', value: '程序部' },
-          { text: '美工部', value: '美工部' },
-          { text: '综合部', value: '综合部' },
-          { text: '闪客部', value: '闪客部' },
-          { text: '视频推广部', value: '视频推广部' },
-          { text: '摄影部', value: '摄影部' },
-          { text: '管理组', value: '管理组' }
-        ]"
+        :filters="departmentFilter"
         :filter-method="filterHandler"
         sortable
       />
@@ -168,11 +161,7 @@ const shortcuts = [
       <el-table-column
         prop="identity"
         label="类别"
-        :filters="[
-          { text: '试用', value: '试用' },
-          { text: '正式', value: '正式' },
-          { text: '管理员', value: '管理员' }
-        ]"
+        :filters="identityFilter"
         :filter-method="filterHandler"
         sortable
       />

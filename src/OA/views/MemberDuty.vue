@@ -309,7 +309,7 @@ onUnmounted(() => {
       <div class="now-duty">
         <div class="now-duty-time">{{ is_duty ? nowDuty.pass_time : '未值班' }}</div>
         <el-divider class="duty_divider" />
-        <div class="now-duty-state">{{ is_duty ? '值班中' : '不在值班时间内' }}</div>
+        <div class="now-duty-state">{{ is_duty ? '值班中' : '快来值班吧~~' }}</div>
       </div>
       <div class="my-duty">
         <div class="record-btn my-duty-btn" @click="showMyRecord">值班记录</div>

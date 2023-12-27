@@ -2,6 +2,7 @@
 import { http } from 'assets/js/http'
 import { ref, reactive, onMounted } from 'vue'
 import { errorAlert, successAlert } from 'assets/js/message.js'
+import { formatterDay, formatterFrame } from 'assets/js/filter.js'
 
 defineProps(['drawer'])
 const emit = defineEmits(['displayApplyDuty'])
@@ -13,57 +14,6 @@ const formatterApplyTime = (data) => {
 }
 const formatterLeaveDate = (data) => {
   let res = data.leave_date.split(' ')[0]
-
-  return res
-}
-const formatterDay = (data) => {
-  let res = ''
-  res += '周'
-  switch (data.day) {
-    case 1:
-      res += '一'
-      break
-    case 2:
-      res += '二'
-      break
-    case 3:
-      res += '三'
-      break
-    case 4:
-      res += '四'
-      break
-    case 5:
-      res += '五'
-      break
-    case 6:
-      res += '六'
-      break
-    case 7:
-      res += '日'
-      break
-  }
-  return res
-}
-
-const formatterFrame = (data) => {
-  let res = ''
-  res += '第'
-  switch (data.frame) {
-    case 1:
-      res += '12节'
-      break
-    case 2:
-      res += '34节'
-      break
-    case 3:
-      res += '56节'
-      break
-    case 4:
-      res += '78节'
-      break
-    case 5:
-      res += '910节'
-  }
   return res
 }
 
@@ -93,30 +43,6 @@ function postLeaveApply() {
       console.log(err)
       errorAlert('添加失败')
     })
-}
-
-function submitLeave() {
-  if (leaveInfo.date.length == 0) {
-    errorAlert('请选择请假时间')
-  } else {
-    postLeaveApply()
-  }
-}
-
-let handleClose = (done) => {
-  emit('displayApplyDuty', false)
-  done()
-}
-
-function toStringDate(date) {
-  let year = date.getFullYear()
-  let month = (date.getMonth() + 1).toString().padStart(2, '0')
-  let day = date.getDate().toString().padStart(2, '0')
-
-  // 将年、月、日拼接成 YYYYMMDD 格式
-  let yyMMdd = `${year}-${month}-${day}`
-
-  return yyMMdd
 }
 
 function getDutyInfo() {
@@ -240,6 +166,31 @@ function getLeaveRecord() {
       console.log(err)
     })
 }
+
+function submitLeave() {
+  if (leaveInfo.date.length == 0) {
+    errorAlert('请选择请假时间')
+  } else {
+    postLeaveApply()
+  }
+}
+
+let handleClose = (done) => {
+  emit('displayApplyDuty', false)
+  done()
+}
+
+function toStringDate(date) {
+  let year = date.getFullYear()
+  let month = (date.getMonth() + 1).toString().padStart(2, '0')
+  let day = date.getDate().toString().padStart(2, '0')
+
+  // 将年、月、日拼接成 YYYYMMDD 格式
+  let yyMMdd = `${year}-${month}-${day}`
+
+  return yyMMdd
+}
+
 onMounted(() => {
   let width = window.innerWidth
   // let height = window.innerHeight

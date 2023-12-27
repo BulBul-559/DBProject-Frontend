@@ -2,6 +2,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { http } from 'assets/js/http'
 import { less768 } from 'assets/js/screen'
+import { departmentFilter, stateFilter } from 'assets/js/filter.js'
 
 defineProps({
   title: {
@@ -52,7 +53,6 @@ onMounted(() => {
 <template>
   <div class="list" :style="{ '--width': _width, '--height': _height }">
     <el-table
-      class="animate__animated animate__fadeInDown"
       :data="tableData"
       :default-sort="{ prop: 'start_time', order: 'descending' }"
       :key="true"
@@ -63,15 +63,7 @@ onMounted(() => {
       <el-table-column
         prop="department"
         label="部门"
-        :filters="[
-          { text: '程序部', value: '程序部' },
-          { text: '美工部', value: '美工部' },
-          { text: '综合部', value: '综合部' },
-          { text: '闪客部', value: '闪客部' },
-          { text: '视频推广部', value: '视频推广部' },
-          { text: '摄影部', value: '摄影部' },
-          { text: '管理组', value: '管理组' }
-        ]"
+        :filters="departmentFilter"
         :filter-method="filterHandler"
         sortable
       />
@@ -80,11 +72,7 @@ onMounted(() => {
       <el-table-column
         prop="duty_state"
         label="状态"
-        :filters="[
-          { text: '正在值班', value: '正在值班' },
-          { text: '正常值班', value: '正常值班' },
-          { text: '异常', value: '值班时间不足30分钟' }
-        ]"
+        :filters="stateFilter"
         :filter-method="filterHandler"
         sortable
       />

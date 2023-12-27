@@ -3,46 +3,17 @@ import { http } from 'assets/js/http'
 import { less768 } from 'assets/js/screen'
 import { reactive, onMounted, ref } from 'vue'
 import { errorAlert, successAlert, messageBox } from 'assets/js/message.js'
+import {
+  departmentOption,
+  identityOption,
+  dutyDayOption,
+  dutyFrameOption
+} from 'assets/js/filter.js'
 
 const propData = defineProps(['drawer', 'info'])
 const emit = defineEmits(['displayMemberEdit', 'getInfo'])
 
 let memberInfo = reactive(propData.info)
-
-const departmentOption = [
-  { label: '程序部', value: '程序部' },
-  { label: '美工部', value: '美工部' },
-  { label: '综合部', value: '综合部' },
-  { label: '闪客部', value: '闪客部' },
-  { label: '视频推广部', value: '视频推广部' },
-  { label: '摄影部', value: '摄影部' },
-  { label: '管理组', value: '管理组' }
-]
-
-const identityOption = [
-  { label: '试用', value: '试用' },
-  { label: '正式', value: '正式' },
-  { label: '管理员', value: '管理员' }
-]
-
-const dutyDay = [
-  { label: '0：未安排', value: '0' },
-  { label: '1：周一', value: '1' },
-  { label: '2：周二', value: '2' },
-  { label: '3：周三', value: '3' },
-  { label: '4：周四', value: '4' },
-  { label: '5：周五', value: '5' },
-  { label: '6：周六', value: '6' },
-  { label: '7：周日', value: '7' }
-]
-const dutyFrame = [
-  { label: '0：未安排', value: '0' },
-  { label: '1：12节', value: '1' },
-  { label: '2：34节', value: '2' },
-  { label: '3：56节', value: '3' },
-  { label: '4：78节', value: '4' },
-  { label: '5：910节', value: '5' }
-]
 
 function modifyMemberInfo() {
   if (
@@ -158,7 +129,7 @@ onMounted(() => {
         <el-form-item prop="memberInfo.duty[0].day" label="值班1">
           <el-select v-model="memberInfo.duty[0].day" class="m-2 duty-select" placeholder="Select">
             <el-option
-              v-for="item in dutyDay"
+              v-for="item in dutyDayOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -170,7 +141,7 @@ onMounted(() => {
             placeholder="Select"
           >
             <el-option
-              v-for="item in dutyFrame"
+              v-for="item in dutyFrameOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -180,7 +151,7 @@ onMounted(() => {
         <el-form-item prop="memberInfo.duty[1].day" label="值班2">
           <el-select v-model="memberInfo.duty[1].day" class="m-2 duty-select" placeholder="Select">
             <el-option
-              v-for="item in dutyDay"
+              v-for="item in dutyDayOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -192,7 +163,7 @@ onMounted(() => {
             placeholder="Select"
           >
             <el-option
-              v-for="item in dutyFrame"
+              v-for="item in dutyFrameOption"
               :key="item.value"
               :label="item.label"
               :value="item.value"

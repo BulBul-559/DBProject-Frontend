@@ -166,6 +166,8 @@ onMounted(() => {
         label="部门"
         :filters="[
           { text: '程序部', value: '程序部' },
+          { text: '媒体中心', value: '媒体中心' },
+          { text: '共建中心', value: '共建中心' },
           { text: '美工部', value: '美工部' },
           { text: '综合部', value: '综合部' },
           { text: '闪客部', value: '闪客部' },

@@ -10,8 +10,7 @@ import navList from './components/navList.vue'
 
 let userStore = useUserStore()
 
-// verify the token is vaild or not
-function verifySignIn() {
+const verifySignIn = new Promise((resolve, reject) => {
   http
     .post('/GetYoutholerInfo/', {})
     .then((res) => {
@@ -25,14 +24,14 @@ function verifySignIn() {
       })
       // store.$patch({ sdut_id: res.data.sdut_id })
       console.log('已登录')
-      return true
+      resolve()
     })
     .catch(function (error) {
       console.log(error)
       userStore.$patch({ sdut_id: 'no id', is_login: false })
-      return false
+      reject()
     })
-}
+})
 
 function checkDuty() {
   http
@@ -74,12 +73,16 @@ onMounted(() => {
     //先检查 pinia
     checkDuty()
     return
-  } else if (verifySignIn() === false) {
-    //未登录重定向
-    window.location.href = '/youthol/'
-  } else {
-    checkDuty()
   }
+  verifySignIn
+    .then(() => {
+      checkDuty()
+    })
+    .catch(() => {
+      window.location.href = '/youthol/'
+    })
+
+
 })
 </script>
 
@@ -142,6 +145,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
+
 @media only screen and (min-width: 768px) {
   /* for desktop */
   .youthol-logo {
@@ -258,6 +263,7 @@ onMounted(() => {
     height: 100%;
     /* background-color: #008aff; */
   }
+  
   .user-info {
     display: flex;
     flex-direction: column;

@@ -12,20 +12,19 @@ import changePassword from './components/changePassword.vue'
 
 let box_state = ref(true)
 
-function verifySignIn() {
+const verifySignIn = new Promise((resolve, reject) => {
   http
-    .post('/getUserInfo/', {})
+    .post('/GetUserInfo/', {})
     .then((res) => {
       // 在这里设置 Pinia状态？
       console.log(res)
-      return true
+      resolve()
     })
     .catch(function (error) {
       console.log(error)
-      return false
+      reject()
     })
-  return false
-}
+})
 
 function switchBox(res) {
   box_state.value = res
@@ -34,9 +33,11 @@ function switchBox(res) {
 
 // 生命周期
 onMounted(() => {
-  if (verifySignIn() == true) {
-    window.location.href = '/youthol/'
-  }
+  verifySignIn
+    .then(() => {
+      window.location.href = '/youthol/'
+    })
+    .catch(() => {})
 })
 </script>
 
