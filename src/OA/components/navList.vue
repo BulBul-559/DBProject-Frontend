@@ -48,6 +48,9 @@ function close() {
     <router-link to="/MachineManage" v-if="userStore.identity == '管理员'">
       <div class="MachineManage nav-item" @click="close">设备管理</div>
     </router-link>
+    <router-link to="/RoomManage" v-if="userStore.identity == '管理员'">
+      <div class="MachineManage nav-item" @click="close">房间管理</div>
+    </router-link>
     <div class="logout nav-item" @click="Logout">退出登录</div>
   </el-scrollbar>
 </template>

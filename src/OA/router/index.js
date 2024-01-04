@@ -8,7 +8,6 @@ const router = createRouter({
       name: 'home',
       components: {
         MainComponment: () => import('../views/MemberDuty.vue')
-        // MainComponment: () => import('../views/OAHome.vue')
       }
     },
     {
@@ -61,10 +60,17 @@ const router = createRouter({
       }
     },
     {
+      path: '/RoomManage',
+      name: 'oa-room-manage',
+      components: {
+        MainComponment: () => import('../views/RoomManage.vue')
+      }
+    },
+    {
       path: '/test',
       name: 'oa-test',
       components: {
-        MainComponment: () => import('../views/test.vue')
+        MainComponment: () => import('../views/TestPage.vue')
       }
     }
   ]
@@ -72,18 +78,18 @@ const router = createRouter({
 
 // 路由守卫
 // router.beforeEach((to, from, next) => {
-//   const isAuthenticated = true; // 替换为你的身份验证逻辑
+//   const isAuthenticated = true // 替换为你的身份验证逻辑
 
-//   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+//   if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
 //     // 如果需要身份验证且用户未登录，则重定向到登录页
-//     next({ path: '/' });
+//     next({ path: '/' })
 //   } else if (isAuthenticated && to.path === '/') {
 //     // 如果用户已登录且尝试访问登录页，则重定向到仪表板页
-//     next({ path: '/' });
+//     next({ path: '/' })
 //   } else {
 //     // 其他情况允许导航
-//     next();
+//     next()
 //   }
-// });
+// })
 
 export default router

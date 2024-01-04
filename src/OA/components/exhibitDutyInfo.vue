@@ -1,7 +1,7 @@
 <script setup>
-import ShowDataBasicBar from './ShowDataBasicBar.vue'
-import ShowDataBasicPie from './ShowDataBasicPie.vue'
-import MemberList from './MemberList.vue'
+import ShowDataBasicBar from 'OA/components/showData/ShowDataBasicBar.vue'
+import ShowDataBasicPie from 'OA/components/showData/ShowDataBasicPie.vue'
+import MemberList from 'OA/components/showData/MemberList.vue'
 
 import { ref } from 'vue'
 

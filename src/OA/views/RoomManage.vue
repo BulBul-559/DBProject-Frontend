@@ -1,7 +1,7 @@
 <script setup>
-import { http } from 'assets/js/http'
+import { ref, onMounted, reactive } from 'vue'
 import { less768 } from 'assets/js/screen'
-import { ref, reactive, onMounted } from 'vue'
+import { http } from 'assets/js/http'
 import { errorAlert, successAlert } from 'assets/js/message.js'
 import { departmentFilter, identityFilter } from 'assets/js/filter.js'
 
@@ -10,6 +10,8 @@ const tableRef = ref()
 let tableData = reactive([])
 let dateRange = ref('')
 let loading = ref(false)
+let _date_picker_size = ref('large')
+let _table_size = ref('large')
 
 const filterHandler = (value, row, column) => {
   const property = column['property']
@@ -63,8 +65,6 @@ function getDutyInfo() {
     })
 }
 
-let _date_picker_size = ref('large')
-let _table_size = ref('large')
 onMounted(() => {
   // getAllYoutholer()
   if (less768()) {
@@ -79,7 +79,6 @@ const shortcuts = [
     value: () => {
       const end = new Date()
       const start = new Date()
-      // start.setTime(start.getTime() - 3600 * 1000 * 24 * 6)
       return [start, end]
     }
   },

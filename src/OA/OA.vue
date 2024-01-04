@@ -81,8 +81,6 @@ onMounted(() => {
     .catch(() => {
       window.location.href = '/youthol/'
     })
-
-
 })
 </script>
 
@@ -145,98 +143,118 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+.user-info-detail {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'SmileySans';
+  font-size: 30px;
+}
+.user-info-detail > div {
+  color: white;
+  padding: 5px;
+}
 
+.el-scrollbar {
+  width: 100%;
+}
+
+.aside-nav {
+  height: 100%;
+  background-color: #008aff;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-nav {
+  height: 50px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+}
+.nav-item {
+  margin: 3px 0;
+  width: 100%;
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+
+.nav-item:hover {
+  opacity: 1;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.7);
+  transform: scale(1.05, 1.05);
+}
+
+.el-footer {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  background-color: #008aff;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+}
+
+.main-layout {
+  height: 100%;
+}
+.el-container {
+  height: 100%;
+}
+
+.state-bar {
+  z-index: 100;
+  color: white;
+}
 
 @media only screen and (min-width: 768px) {
   /* for desktop */
   .youthol-logo {
     display: none;
   }
-  .user-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-  }
-  .user-info-detail {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: 'SmileySans';
-    font-size: 30px;
-  }
 
-  .user-info-detail > div {
-    color: white;
-    padding: 5px;
-  }
-
-  .el-scrollbar {
-    width: 100%;
-  }
   .header-nav {
-    height: 0px;
+    /* height: 0px; */
+    display: none;
   }
+
   .aside-nav {
-    height: 100%;
     width: 200px;
-    background-color: #008aff;
-    font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .nav-item {
-    margin: 3px 0;
-    width: 100%;
-    padding: 20px 0px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    transition:
-      transform 0.3s,
-      box-shadow 0.3s;
-  }
-
-  .nav-item:hover {
-    opacity: 1;
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.7);
-    transform: scale(1.05, 1.05);
-  }
-
-  .el-footer {
-    height: 30px;
-    width: 100%;
-    display: flex;
-    background-color: #008aff;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-  }
-
-  .main-layout {
-    height: 100%;
-  }
-  .el-container {
-    height: 100%;
-  }
-
-  .state-bar {
-    z-index: 100;
     color: white;
   }
 }
 
 @media only screen and (max-width: 768px) {
   /* for phone */
+  .youthol-logo {
+    height: 40px;
+    /* width: 105px; */
+    width: auto;
+  }
   .top-nav {
     padding: 0 10px;
     width: 100%;
@@ -263,109 +281,29 @@ onMounted(() => {
     height: 100%;
     /* background-color: #008aff; */
   }
-  
-  .user-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-  }
-
-  .user-info-detail {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: 'SmileySans';
-    font-size: 30px;
-  }
-
-  .user-info-detail > div {
-    color: white;
-    padding: 5px;
-  }
-
-  .el-scrollbar {
-    width: 100%;
-  }
 
   .el-main {
     padding: 50px 10px 10px;
   }
 
-  .youthol-logo {
-    height: 40px;
-    /* width: 105px; */
-    width: auto;
-  }
   .header-nav {
-    height: 50px;
     width: 100%;
-    z-index: 1000;
-    /* background-color: #008aff; */
-    display: flex;
-    /* flex-direction: column; */
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
   }
+
   .aside-nav {
-    height: 100%;
-    width: 0px;
-    background-color: #008aff;
-    font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    /* width: 0px; */
+    display: none;
   }
 
   .nav-item {
-    margin: 3px 0;
-    width: 100%;
-    padding: 20px 0px;
     color: #f68512;
     font-weight: 800;
     font-size: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    transition:
-      transform 0.3s,
-      box-shadow 0.3s;
   }
-
   .nav-item:hover {
     opacity: 1;
     box-shadow: inset 0 0 20px #57b1ff6f;
     transform: scale(1.05, 1.05);
-  }
-
-  .el-footer {
-    height: 30px;
-    width: 100%;
-    display: flex;
-    background-color: #008aff;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-  }
-
-  .main-layout {
-    height: 100%;
-  }
-  .el-container {
-    height: 100%;
-  }
-
-  .state-bar {
-    z-index: 100;
-    color: white;
   }
 }
 </style>

@@ -31,6 +31,7 @@ const debounce = (function () {
     timer = setTimeout(callback, ms)
   }
 })()
+
 function getLocation() {
   return new Promise((resolve, reject) => {
     // 模拟异步获取位置信息
@@ -64,8 +65,8 @@ function startDuty() {
 
   getLocation().then((location) => {
     debounce(async () => {
-      console.log(location.lat)
-      console.log(location.longt)
+      // console.log(location.lat)
+      // console.log(location.longt)
 
       http
         .post('/StartDuty/', {
@@ -102,7 +103,7 @@ function startDuty() {
             nowDuty.pass_time = getTime(nowDuty.start_time)
           }, 1000)
 
-          console.log(res)
+          // console.log(res)
         })
         .catch(function (error) {
           waiting_duty = false
@@ -181,7 +182,7 @@ function toSignOutState(lat, longt) {
 function finishDuty() {
   if (waiting_duty) {
     ElMessage('正在签退，请稍后')
-    console.log('is true')
+    // console.log('is true')
     return
   }
 
@@ -250,7 +251,7 @@ function checkDuty() {
       sdut_id: userStore.sdut_id
     })
     .then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       let data = res.data
       if (data.duty_state == '未值班') return
 
@@ -267,8 +268,8 @@ function checkDuty() {
         nowDuty.pass_time = getTime(nowDuty.start_time)
       }, 1000)
     })
-    .catch(function (error) {
-      console.log(error)
+    .catch(function () {
+      // console.log(error)
       errorAlert('检查签到状态失败')
     })
 }
@@ -335,39 +336,86 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.start-duty {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.sigb-btn-box {
+  width: 30%;
+  /* width: 250px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #008aff;
+  border-radius: 4000px;
+  border: 3px solid #008aff;
+  background-color: white;
+  /* box-shadow: 0 0 10px 10px hsla(208, 80%, 61%, 0.498); */
+  transition:
+    box-shadow 0.25s,
+    transform 0.5s;
+}
+.now-duty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+}
+
+.record-btn {
+  color: #008aff;
+  background-color: white;
+  border-radius: 30px;
+  border: 3px solid #008aff;
+}
+
+.leave-btn {
+  color: #008aff;
+  background-color: white;
+  border-radius: 30px;
+  border: 3px solid #008aff;
+}
+
+.record-btn:hover {
+  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+  transform: scale(1.05, 1.05);
+}
+
+.leave-btn:hover {
+  box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
+  transform: scale(1.05, 1.05);
+}
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+.duty_divider {
+  margin: 10px;
+}
 @media only screen and (min-width: 768px) {
   /* for dektop */
   .start-duty {
     height: 300px;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
   }
-  .sigb-btn-box {
-    width: 30%;
-    /* width: 250px; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+
   .sign-btn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 200px;
     height: 200px;
     font-size: 60px;
-    color: #008aff;
-    border-radius: 4000px;
-    border: 3px solid #008aff;
-    background-color: white;
-    /* box-shadow: 0 0 10px 10px hsla(208, 80%, 61%, 0.498); */
-    transition:
-      box-shadow 0.25s,
-      transform 0.5s;
   }
 
   .sign-btn:hover {
@@ -377,11 +425,6 @@ onUnmounted(() => {
 
   .now-duty {
     width: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
   }
 
   .now-duty-time {
@@ -391,14 +434,11 @@ onUnmounted(() => {
     border-radius: 25px;
     font-size: 50px;
     padding: 20px 20px;
-    /* border: 3px solid #008aff; */
     color: #008aff;
   }
 
   .my-duty {
     width: 30%;
-    /* width: 250px; */
-    /* height: 200px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -409,80 +449,30 @@ onUnmounted(() => {
     font-size: 40px;
     padding: 20px;
     margin: 20px 0;
-    /* animation-name: slidein; */
     transition:
       box-shadow 0.25s,
       transform 0.5s;
   }
 
   .record-btn {
-    color: #008aff;
-    background-color: white;
     border-radius: 30px;
-    border: 3px solid #008aff;
   }
 
   .leave-btn {
-    color: #008aff;
-    background-color: white;
     border-radius: 30px;
-    /* border: 3px solid #fe8a13; */
-    border: 3px solid #008aff;
-  }
-
-  .record-btn:hover {
-    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-    transform: scale(1.05, 1.05);
-  }
-
-  .leave-btn:hover {
-    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-    transform: scale(1.05, 1.05);
-  }
-
-  .main-layout {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-  }
-  .duty_divider {
-    margin: 10px;
   }
 }
 @media only screen and (max-width: 768px) {
   /* for phone */
   .start-duty {
     height: 320px;
-    width: 100%;
-    display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
   }
-  .sigb-btn-box {
-    width: 30%;
-    /* width: 250px; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+
   .sign-btn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 120px;
     height: 120px;
     font-size: 35px;
-    color: #008aff;
-    border-radius: 4000px;
-    border: 3px solid #008aff;
-    background-color: white;
-    transition:
-      box-shadow 0.25s,
-      transform 0.5s;
   }
 
   .sign-btn:hover {
@@ -492,11 +482,6 @@ onUnmounted(() => {
 
   .now-duty {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
   }
 
   .now-duty-time {
@@ -511,7 +496,6 @@ onUnmounted(() => {
   .my-duty {
     width: 100%;
     display: flex;
-    /* flex-direction: column; */
     justify-content: center;
     align-items: center;
   }
@@ -526,38 +510,11 @@ onUnmounted(() => {
   }
 
   .record-btn {
-    color: #008aff;
-    background-color: white;
     border-radius: 20px;
-    border: 3px solid #008aff;
   }
 
   .leave-btn {
-    color: #008aff;
-    background-color: white;
     border-radius: 20px;
-    /* border: 3px solid #fe8a13; */
-    border: 3px solid #008aff;
-  }
-
-  .record-btn:hover {
-    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-    transform: scale(1.05, 1.05);
-  }
-
-  .leave-btn:hover {
-    box-shadow: 0 0 10px 10px rgba(215, 215, 215, 0.694);
-    transform: scale(1.05, 1.05);
-  }
-
-  .main-layout {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-  }
-  .duty_divider {
-    margin: 10px;
   }
 }
 </style>
