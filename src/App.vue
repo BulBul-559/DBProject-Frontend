@@ -60,14 +60,7 @@ onMounted(() => {
       <div v-if="store.is_login" class="choice" @click="toOA">OA系统</div>
       <!-- <div class="choice">我要投稿</div> -->
       <!-- <a href=""></a> -->
-      <div
-        class="choice"
-        @click="
-          openPage(
-            'http://youthlab-sdut-edu-cn-s.newvpn.sdut.edu.cn:8118/app/wechat-service/home/#/'
-          )
-        "
-      >
+      <div class="choice" @click="openPage('https://youthol.online/student-service/')">
         学生服务
       </div>
       <div

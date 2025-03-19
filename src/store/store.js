@@ -10,10 +10,11 @@ export const useUserStore = defineStore('userStore', () => {
   const name = ref()
   const department = ref()
   const identity = ref()
+  const position = ref()
 
-  return { sdut_id, is_login, duty_state, duty_start_time, name, department, identity }
+  return { sdut_id, is_login, duty_state, duty_start_time, name, department, identity, position }
 })
 
-// export const useOAStore = defineStore('oaStore', () => {
+// export const useOAStore = defineStore('oaStore', () => {  
 //   // const oa_id = ref()
 // })

@@ -3,7 +3,7 @@ import { ref, onMounted, reactive } from 'vue'
 import { less768 } from 'assets/js/screen'
 import { http } from 'assets/js/http'
 import { errorAlert, successAlert } from 'assets/js/message.js'
-import { departmentFilter, identityFilter } from 'assets/js/filter.js'
+import { departmentFilter } from 'assets/js/filter.js'
 
 const tableRef = ref()
 
@@ -35,7 +35,8 @@ function getDutyInfo() {
 
   loading.value = true
   http
-    .post('/GetTotalDutyInRange/', {
+    .post('/GetRoomBorrowRecordInRange/', {
+      room_id: '302',
       start_time: dateRange.value[0],
       end_time: dateRange.value[1]
     })
@@ -46,22 +47,25 @@ function getDutyInfo() {
       for (let i = 0; i < data.length; i++) {
         let item = {
           sdut_id: data[i].sdut_id,
-          unique_id: data[i].sdut_id + data[i].department,
+          room_id: data[i].room_id,
+          unique_id: data[i].sdut_id + data[i].room_id + data[i].borrow_date + data[i].start_time,
           name: data[i].name,
           department: data[i].department,
-          identity: data[i].identity,
-          total_time: (data[i].total_time / 3600).toFixed(2),
-          absence: data[i].absence,
-          leave: data[i].leave
+          apply_time: data[i].apply_time,
+          borrow_date: data[i].borrow_date,
+          start_time: data[i].start_time,
+          end_time: data[i].end_time
         }
         tableData.push(item)
       }
-      successAlert('共找到' + tableData.length + '条值班信息')
+
+      successAlert('共找到' + tableData.length + '条借用信息')
       loading.value = false
     })
     .catch(function (error) {
       console.log(error)
-      errorAlert('获取值班信息失败')
+      errorAlert('获取借用信息失败')
+      loading.value = false
     })
 }
 
@@ -109,6 +113,24 @@ const shortcuts = [
       start.setTime(start.getTime() - 3600 * 1000 * 24 * 29)
       return [start, end]
     }
+  },
+  {
+    text: '未来一周',
+    value: () => {
+      const start = new Date()
+      const end = new Date()
+      end.setTime(end.getTime() + 3600 * 1000 * 24 * 6) // 未来6天（包括今天）
+      return [start, end]
+    }
+  },
+  {
+    text: '未来两周',
+    value: () => {
+      const start = new Date()
+      const end = new Date()
+      end.setTime(end.getTime() + 3600 * 1000 * 24 * 13) // 未来13天（包括今天）
+      return [start, end]
+    }
   }
 ]
 </script>
@@ -140,7 +162,8 @@ const shortcuts = [
       v-loading="loading"
       :size="_table_size"
     >
-      <el-table-column prop="name" label="姓名" sortable />
+      <el-table-column prop="room_id" label="房间号" sortable />
+      <el-table-column prop="name" label="借用人" sortable />
       <el-table-column prop="sdut_id" label="学号" sortable />
       <el-table-column
         prop="department"
@@ -150,17 +173,10 @@ const shortcuts = [
         sortable
       />
 
-      <el-table-column prop="total_time" label="累计时长（小时）" sortable />
-      <el-table-column prop="absence" label="缺勤" sortable />
-      <el-table-column prop="leave" label="请假" sortable />
-
-      <el-table-column
-        prop="identity"
-        label="类别"
-        :filters="identityFilter"
-        :filter-method="filterHandler"
-        sortable
-      />
+      <el-table-column prop="apply_time" label="申请时间" sortable />
+      <el-table-column prop="borrow_date" label="借用日期" sortable />
+      <el-table-column prop="start_time" label="开始时间" sortable />
+      <el-table-column prop="end_time" label="结束时间" sortable />
     </el-table>
   </div>
 </template>

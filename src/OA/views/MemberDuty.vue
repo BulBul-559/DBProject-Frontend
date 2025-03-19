@@ -314,7 +314,7 @@ onUnmounted(() => {
       </div>
       <div class="my-duty">
         <div class="record-btn my-duty-btn" @click="showMyRecord">值班记录</div>
-        <div class="leave-btn my-duty-btn" @click="applyLeave">值班请假</div>
+        <!-- <div class="leave-btn my-duty-btn" @click="applyLeave">值班请假</div> -->
       </div>
     </div>
     <el-divider />

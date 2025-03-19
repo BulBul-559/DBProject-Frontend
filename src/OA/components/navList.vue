@@ -23,34 +23,38 @@ function close() {
       <div class="duty nav-item" @click="close">值班</div>
     </router-link>
 
-    <router-link to="/borrow">
+    <!-- <router-link to="/borrow">
       <div class="borrow nav-item" @click="close">设备</div>
-    </router-link>
+    </router-link> -->
 
-    <router-link to="/study">
+    <!-- <router-link to="/study">
       <div class="study nav-item" @click="close">培训</div>
-    </router-link>
+    </router-link> -->
 
-    <router-link to="/room">
-      <div class="room nav-item" @click="close">场地</div>
-    </router-link>
+    <!-- <router-link to="/test">
+      <div class="test nav-item" @click="close">房间</div>
+    </router-link> -->
 
-    <router-link to="/test">
-      <div class="test nav-item" @click="close">测试</div>
+    <router-link to="/room" v-if="userStore.position == '负责人' || userStore.identity == '管理员'">
+      <div class="room nav-item" @click="close">房间借用</div>
     </router-link>
 
     <router-link to="/DutyRecord" v-if="userStore.identity == '管理员'">
       <div class="DutyRecord nav-item" @click="close">签到记录</div>
     </router-link>
+
+    <router-link to="/RoomManage" v-if="userStore.identity == '管理员'">
+      <div class="MachineManage nav-item" @click="close">房间借用记录</div>
+    </router-link>
+
     <router-link to="/MemberManage" v-if="userStore.identity == '管理员'">
       <div class="MemberManage nav-item" @click="close">成员管理</div>
     </router-link>
+    <!-- 
     <router-link to="/MachineManage" v-if="userStore.identity == '管理员'">
       <div class="MachineManage nav-item" @click="close">设备管理</div>
-    </router-link>
-    <router-link to="/RoomManage" v-if="userStore.identity == '管理员'">
-      <div class="MachineManage nav-item" @click="close">房间管理</div>
-    </router-link>
+    </router-link> -->
+
     <div class="logout nav-item" @click="Logout">退出登录</div>
   </el-scrollbar>
 </template>

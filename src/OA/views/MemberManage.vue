@@ -5,6 +5,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { errorAlert } from 'assets/js/message.js'
 import modifyMemberInfo from '../components/modifyMemberInfo.vue'
 import addNewYoutholer from '../components/addNewYoutholer.vue'
+import { departmentFilter } from 'assets/js/filter.js'
 
 // let userStore = useUserStore()
 
@@ -89,6 +90,8 @@ function getAllYoutholer() {
   http
     .post('/GetAllYoutholer/', {})
     .then((res) => {
+      console.log(res.data)
+
       let data = res.data
       tableData.length = 0
       for (let i = 0; i < data.length; i++) {
@@ -107,6 +110,7 @@ function getAllYoutholer() {
     .catch(function (error) {
       console.log(error)
       errorAlert('获取成员信息失败')
+      loading.value = false
     })
 }
 
@@ -164,17 +168,7 @@ onMounted(() => {
         align="center"
         prop="department"
         label="部门"
-        :filters="[
-          { text: '程序部', value: '程序部' },
-          { text: '媒体中心', value: '媒体中心' },
-          { text: '共建中心', value: '共建中心' },
-          { text: '美工部', value: '美工部' },
-          { text: '综合部', value: '综合部' },
-          { text: '闪客部', value: '闪客部' },
-          { text: '视频推广部', value: '视频推广部' },
-          { text: '摄影部', value: '摄影部' },
-          { text: '管理组', value: '管理组' }
-        ]"
+        :filters="departmentFilter"
         :filter-method="filterHandler"
         sortable
       />

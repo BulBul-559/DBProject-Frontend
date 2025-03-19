@@ -198,7 +198,7 @@ function renderGanttItem(params, api) {
   var y = timeStart[1] - barHeight
   var borrowDepartment = api.value(3) + ''
   var departmentWidth = echarts.format.getTextRect(borrowDepartment).width
-  var text = barLength > departmentWidth && x + barLength >= 180 ? borrowDepartment : ''
+  var text = barLength > departmentWidth && x + barLength >= 80 ? borrowDepartment : ''
   var rectNormal = clipRectByRect(params, {
     x: x,
     y: y,

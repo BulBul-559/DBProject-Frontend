@@ -14,13 +14,16 @@ const verifySignIn = new Promise((resolve, reject) => {
   http
     .post('/GetYoutholerInfo/', {})
     .then((res) => {
+      console.log(res)
+
       // 在这里设置 Pinia状态？
       userStore.$patch({
         sdut_id: res.data.sdut_id,
         is_login: true,
         name: res.data.name,
         department: res.data.department,
-        identity: res.data.identity
+        identity: res.data.identity,
+        position: res.data.position
       })
       // store.$patch({ sdut_id: res.data.sdut_id })
       console.log('已登录')

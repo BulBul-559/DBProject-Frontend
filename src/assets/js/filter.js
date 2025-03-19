@@ -1,3 +1,15 @@
+// export const departmentOption = [
+//   { label: '程序部', value: '程序部' },
+//   { label: '媒体中心', value: '媒体中心' },
+//   { label: '共建中心', value: '共建中心' },
+//   { label: '美工部', value: '美工部' },
+//   { label: '综合部', value: '综合部' },
+//   { label: '闪客部', value: '闪客部' },
+//   { label: '视频推广部', value: '视频推广部' },
+//   { label: '摄影部', value: '摄影部' },
+//   { label: '管理组', value: '管理组' }
+// ]
+
 export const departmentOption = [
   { label: '程序部', value: '程序部' },
   { label: '媒体中心', value: '媒体中心' },
@@ -6,6 +18,7 @@ export const departmentOption = [
   { label: '综合部', value: '综合部' },
   { label: '闪客部', value: '闪客部' },
   { label: '视频推广部', value: '视频推广部' },
+  { label: '视频编辑部', value: '视频编辑部' },
   { label: '摄影部', value: '摄影部' },
   { label: '管理组', value: '管理组' }
 ]
@@ -35,14 +48,27 @@ export const dutyFrameOption = [
   { label: '5：910节', value: '5' }
 ]
 
+// export const departmentFilter = [
+//   { text: '程序部', value: '程序部' },
+//   { text: '媒体中心', value: '媒体中心' },
+//   { text: '共建中心', value: '共建中心' },
+//   { text: '美工部', value: '美工部' },
+//   { text: '综合部', value: '综合部' },
+//   { text: '闪客部', value: '闪客部' },
+//   { text: '视频推广部', value: '视频推广部' },
+//   { text: '摄影部', value: '摄影部' },
+//   { text: '管理组', value: '管理组' }
+// ]
+
 export const departmentFilter = [
   { text: '程序部', value: '程序部' },
   { text: '媒体中心', value: '媒体中心' },
   { text: '共建中心', value: '共建中心' },
   { text: '美工部', value: '美工部' },
   { text: '综合部', value: '综合部' },
-  { text: '闪客部', value: '闪客部' },
+  { text: '视频编辑部', value: '视频编辑部' },
   { text: '视频推广部', value: '视频推广部' },
+  { text: '闪客部', value: '闪客部' },
   { text: '摄影部', value: '摄影部' },
   { text: '管理组', value: '管理组' }
 ]
@@ -50,7 +76,9 @@ export const departmentFilter = [
 export const stateFilter = [
   { text: '正在值班', value: '正在值班' },
   { text: '正常值班', value: '正常值班' },
-  { text: '异常', value: '值班时间不足30分钟' }
+  { text: '值班时间不足', value: '值班时间不足' },
+  { text: '早退', value: '早退' },
+  { text: '迟到', value: '迟到' }
 ]
 
 export const identityFilter = [

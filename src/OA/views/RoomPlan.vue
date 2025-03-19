@@ -4,6 +4,8 @@ import { http } from 'assets/js/http'
 import ExhibitRoomBorrow from '../components/exhibitRoomBorrow.vue'
 import { useUserStore } from 'store/store.js'
 import { errorAlert, successAlert } from 'assets/js/message.js'
+import exhibitMyBorrowRecord from '../components/exhibitMyBorrowRecord.vue'
+
 let userStore = useUserStore()
 
 let borrowInfo = reactive({
@@ -61,7 +63,6 @@ function GetRoomBorrow() {
 
 let applying = false
 function applyRoom() {
-  chartRef.value.add()
   if (borrowInfo.dateValue == '' || borrowInfo.startTime == '' || borrowInfo.endTime == '') {
     errorAlert('请完善信息')
     return
@@ -80,10 +81,8 @@ function applyRoom() {
       room_id: '302'
     })
     .then((res) => {
-      console.log(res.data)
       applying = false
       if (res.data == 'success') {
-        chartRef.value.GetNewData()
         successAlert('借用成功')
       } else if (res.data == 'busy') {
         errorAlert('借用失败')
@@ -91,12 +90,25 @@ function applyRoom() {
         errorAlert('未知错误')
       }
     })
+    .then(() => {
+      chartRef.value.GetNewData()
+    })
     .catch(() => {})
 }
 
 onMounted(() => {
   GetRoomBorrow()
 })
+
+let borrowRecordDrawer = ref(false)
+
+function displayBorrowRecord(res) {
+  borrowRecordDrawer.value = res
+}
+
+function openMyBorrowRecord() {
+  displayBorrowRecord(true)
+}
 </script>
 <template>
   <div class="options">
@@ -141,11 +153,23 @@ onMounted(() => {
       </el-form-item>
     </el-form>
     <div class="btn" @click="applyRoom">借用</div>
+    <div class="btn" @click="openMyBorrowRecord">我的记录</div>
   </div>
   <ExhibitRoomBorrow ref="chartRef"></ExhibitRoomBorrow>
+
+  <exhibitMyBorrowRecord
+    v-if="borrowRecordDrawer"
+    @displayBorrowRecord="displayBorrowRecord"
+    :drawer="borrowRecordDrawer"
+  >
+  </exhibitMyBorrowRecord>
 </template>
 
 <style scoped>
+.box {
+  width: 100%;
+  height: 100px;
+}
 .options {
   width: 100%;
   display: flex;
@@ -183,6 +207,7 @@ onMounted(() => {
 @media only screen and (max-width: 768px) {
   .date-picker {
     margin: 20px 0;
+    flex-direction: column;
   }
   .options {
     flex-direction: column;
